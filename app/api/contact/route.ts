@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: "eldiearubang@yahoo.com",
       replyTo: email,
@@ -29,9 +29,14 @@ export async function POST(req: Request) {
       `,
     });
 
-    return NextResponse.json({ ok: true });
+    if (result.error) {
+      console.error("Resend error:", result.error);
+      return NextResponse.json({ error: result.error }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true, id: result.data?.id });
   } catch (err) {
     console.error("Contact email error:", err);
-    return NextResponse.json({ error: "Failed to send" }, { status: 500 });
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

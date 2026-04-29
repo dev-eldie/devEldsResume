@@ -27,11 +27,12 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message }),
       });
+      const data = await res.json();
       if (res.ok) {
         setStatus({ msg: "✓ Message sent! I'll get back to you within 24 hours.", ok: true });
         form.reset();
       } else {
-        setStatus({ msg: "Something went wrong. Try emailing me directly.", ok: false });
+        setStatus({ msg: `Error: ${JSON.stringify(data.error)}`, ok: false });
       }
     } catch {
       setStatus({ msg: "Network error. Try emailing me directly.", ok: false });
