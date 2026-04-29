@@ -14,16 +14,29 @@ export function ContactForm() {
     const name = (data.get("name") || "").toString().trim();
     const email = (data.get("email") || "").toString().trim();
     const message = (data.get("message") || "").toString().trim();
+
     if (!name || !email || !message) {
       setStatus({ msg: "Please complete all fields before sending.", ok: false });
       return;
     }
+
     setSubmitting(true);
-    // Local-only demo: no backend dispatch. Simulate success.
-    await new Promise((r) => setTimeout(r, 800));
-    setStatus({ msg: "✓ Message queued. I'll get back within 24 hours.", ok: true });
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      if (res.ok) {
+        setStatus({ msg: "✓ Message sent! I'll get back to you within 24 hours.", ok: true });
+        form.reset();
+      } else {
+        setStatus({ msg: "Something went wrong. Try emailing me directly.", ok: false });
+      }
+    } catch {
+      setStatus({ msg: "Network error. Try emailing me directly.", ok: false });
+    }
     setSubmitting(false);
-    form.reset();
   }
 
   return (
