@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(python3 \"C:\\\\Users\\\\steam\\\\.claude\\\\skills\\\\ui-ux-pro-max\\\\scripts\\\\search.py\" \"portfolio frontend developer designer futuristic glassmorphism neumorphism\" --design-system -p \"Eldie Portfolio\" -f markdown)",
+      "Bash(py -3 --version)",
+      "Bash(npx next *)"
+    ]
+  }
+}

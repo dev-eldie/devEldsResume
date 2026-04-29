@@ -1,0 +1,289 @@
+{
+  "hero": {
+    "statusText": "Available for select projects · Q2 2026",
+    "title": {
+      "l1": "Front-End",
+      "l2grad": "Engineer",
+      "l3stroke": "UI/UX",
+      "l3italic": "Designer"
+    },
+    "blurb": "Hi, I'm <strong>Eldie Arubang</strong> — a Process Expert front-end developer with <strong>15 years</strong> of crafting intuitive, performant web interfaces. I design systems that feel obvious, build experiences that feel inevitable.",
+    "stats": [
+      {
+        "value": 43,
+        "label": "Projects shipped",
+        "suffix": ""
+      },
+      {
+        "value": 15,
+        "label": "Years experience",
+        "suffix": ""
+      },
+      {
+        "value": 6,
+        "label": "Companies served",
+        "suffix": ""
+      },
+      {
+        "value": 100,
+        "label": "Pixel-perfect",
+        "suffix": "%"
+      }
+    ]
+  },
+  "about": {
+    "eyebrow": "01 · About",
+    "headingLead": "Designer who codes,",
+    "headingGrad": "engineer who cares about pixels.",
+    "sub": "Over a decade in the trenches — from Manila WordPress shops to Henkel's Asia Pacific service center. I bridge design and engineering so neither side has to compromise.",
+    "objective": "A results-driven Front-End Developer & UI/UX Designer with over a decade of experience designing and developing web applications, optimizing user experience, and implementing creative digital solutions.",
+    "objectiveSecondary": "Passionate about crafting intuitive and visually appealing interfaces that enhance usability and engagement.",
+    "profile": {
+      "role": "PROCESS_EXPERT // FRONT-END",
+      "avatarUrl": "/uploads/avatar-1777230455335.png",
+      "meta": [
+        {
+          "k": "Location",
+          "v": "Quezon City, PH"
+        },
+        {
+          "k": "Born",
+          "v": "March 26, 1987"
+        },
+        {
+          "k": "Status",
+          "v": "Open to work"
+        },
+        {
+          "k": "Timezone",
+          "v": "UTC +08:00"
+        }
+      ]
+    }
+  },
+  "skills": [
+    {
+      "iconKey": "code",
+      "title": "Front-End Engineering",
+      "description": "Modern JS frameworks, semantic markup, scalable CSS, web performance.",
+      "tags": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "TypeScript",
+        "React.js",
+        "Vue.js"
+      ],
+      "proficiency": 95
+    },
+    {
+      "iconKey": "design",
+      "title": "UI / UX Design",
+      "description": "Wireframes, design systems, prototypes, usability principles, accessibility.",
+      "tags": [
+        "Figma",
+        "Adobe XD",
+        "Photoshop",
+        "Illustrator",
+        "Design Systems"
+      ],
+      "proficiency": 92
+    },
+    {
+      "iconKey": "commerce",
+      "title": "Shopify & Liquid",
+      "description": "Custom themes, sections, snippets, theme app extensions, and storefront customization.",
+      "tags": [
+        "Shopify",
+        "Liquid",
+        "Theme Dev",
+        "Sections",
+        "Storefront"
+      ],
+      "proficiency": 88
+    },
+    {
+      "iconKey": "cms",
+      "title": "CMS & Backend",
+      "description": "Custom WP themes, plugins, server-side rendering, data modeling.",
+      "tags": [
+        "WordPress",
+        "PHP",
+        "MySQL",
+        "Java EE"
+      ],
+      "proficiency": 86
+    },
+    {
+      "iconKey": "creative",
+      "title": "Creative Direction",
+      "description": "Brand storytelling, visual identity, art direction across surfaces.",
+      "tags": [
+        "Branding",
+        "Art Direction",
+        "Team Collab",
+        "Social Marketing"
+      ],
+      "proficiency": 80
+    }
+  ],
+  "experience": [
+    {
+      "role": "Process Expert · Front-End Developer",
+      "company": "HENKEL ASIA PACIFIC SERVICE CENTRE",
+      "period": "Mar 2020 — Jan 2025",
+      "body": "Collaborated with stakeholders to design and maintain internal calculators and UI/UX for web applications. Used React.js and vanilla JavaScript to enhance user experience across global tooling.",
+      "stack": [
+        "React.js",
+        "JavaScript",
+        "UI/UX",
+        "Process Design"
+      ]
+    },
+    {
+      "role": "Front-End Developer · UI/UX Designer",
+      "company": "SIGWAY HIGGS GROUPS LIMITED",
+      "period": "Mar 2018 — May 2019",
+      "body": "Developed custom WordPress themes and plugins, ensuring pixel-perfect designs. Converted PSDs to responsive HTML with a focus on UI/UX enhancements.",
+      "stack": [
+        "WordPress",
+        "PHP",
+        "PSD → HTML",
+        "Pixel-perfect"
+      ]
+    },
+    {
+      "role": "Front-End Developer · Graphic Designer",
+      "company": "SOURCEFIT PHILIPPINES",
+      "period": "Jul 2016 — Oct 2017",
+      "body": "Created custom templates and post types based on mockups. Designed and developed website functionalities and optimized sites for SEO. Produced graphics and logos for in-house projects.",
+      "stack": [
+        "WordPress",
+        "SEO",
+        "Graphic Design",
+        "Branding"
+      ]
+    },
+    {
+      "role": "Front-End Developer",
+      "company": "OUTSOURCED QUALITY ASSURED SERVICES",
+      "period": "May 2015 — Apr 2016",
+      "body": "Advocated for web interaction best practices with a focus on consistency and usability. Built reusable code libraries and validated user input. Worked on an e-commerce platform for an Australian client, customizing functionalities with JavaScript.",
+      "stack": [
+        "JavaScript",
+        "E-commerce",
+        "Component Libraries"
+      ]
+    },
+    {
+      "role": "Lead Front-End Developer",
+      "company": "BIG SKY GROUP",
+      "period": "Mar 2011 — Feb 2015",
+      "body": "Led front-end work across multiple e-commerce and content sites. Built reusable code libraries, validated user input, and drove a culture of consistency and usability across teams.",
+      "stack": [
+        "Leadership",
+        "JavaScript",
+        "E-commerce",
+        "Code Architecture"
+      ]
+    },
+    {
+      "role": "PHP Developer · Web & Graphic Designer",
+      "company": "BROKERHOUSE INC.",
+      "period": "May 2010 — Feb 2011",
+      "body": "First professional role — built dynamic websites with PHP and MySQL, hand-coded HTML/CSS/JavaScript front-ends, and produced supporting visuals. Designed page layouts, logos, and marketing collateral that aligned with each client's brand. The foundation that shaped everything I do today.",
+      "stack": [
+        "PHP",
+        "MySQL",
+        "HTML/CSS",
+        "JavaScript",
+        "Photoshop",
+        "Illustrator"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "period": "2004 — 2008",
+      "degree": "B.S. in Information Technology",
+      "school": "STI College · Software Development track · Philippines"
+    },
+    {
+      "period": "2008 — 2010 · short courses",
+      "degree": "PHP & Java EE Programming",
+      "school": "Phonix-One Institute · Philippines"
+    },
+    {
+      "period": "Ongoing",
+      "degree": "Self-directed practice",
+      "school": "React, TypeScript, Vue, Shopify Liquid, modern CSS, design systems"
+    }
+  ],
+  "tools": [
+    {
+      "name": "Figma",
+      "iconKey": "figma"
+    },
+    {
+      "name": "React",
+      "iconKey": "react"
+    },
+    {
+      "name": "Vue",
+      "iconKey": "vue"
+    },
+    {
+      "name": "TypeScript",
+      "iconKey": "ts"
+    },
+    {
+      "name": "Shopify",
+      "iconKey": "shopify"
+    },
+    {
+      "name": "WordPress",
+      "iconKey": "wp"
+    },
+    {
+      "name": "Adobe XD",
+      "iconKey": "xd"
+    },
+    {
+      "name": "Photoshop",
+      "iconKey": "ps"
+    },
+    {
+      "name": "Illustrator",
+      "iconKey": "ai"
+    }
+  ],
+  "marquee": [
+    "React",
+    "Vue.js",
+    "TypeScript",
+    "UI / UX",
+    "Figma",
+    "Adobe XD",
+    "Shopify",
+    "Liquid",
+    "WordPress",
+    "PHP / MySQL",
+    "MongoDB"
+  ],
+  "contact": {
+    "eyebrow": "05 · Contact",
+    "headingLead": "Have a project in mind?",
+    "headingGrad": "Let's build it together.",
+    "sub": "Open to remote, hybrid, or onsite (Metro Manila) engagements. Currently accepting select projects starting Q2 2026.",
+    "phone": "+639.15.888.3807",
+    "email": "eldiearubang@gmail.com",
+    "portfolio": "myBehance!",
+    "portfolioUrl": "https://behance.net/earubang",
+    "location": "Quezon City, Philippines"
+  },
+  "meta": {
+    "name": "Eldie Arubang",
+    "title": "Eldie Arubang · Front-End Developer & UI/UX Designer",
+    "description": "Eldie Arubang | Front-End Developer & UI/UX Designer. 15 years crafting interfaces, 43 shipped projects."
+  }
+}
