@@ -55,6 +55,7 @@ export const ContentSchema = z.object({
     profile: z.object({
       role: z.string(),
       avatarUrl: z.string().optional().default(""),
+      avatarUrls: z.array(z.string()).default([]),
       meta: z.array(z.object({ k: z.string(), v: z.string() })).length(4),
     }),
   }),

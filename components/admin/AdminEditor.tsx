@@ -11,11 +11,10 @@ const TOOL_KEYS = ["figma", "react", "vue", "ts", "shopify", "wp", "xd", "ps", "
 export function AdminEditor({ initial }: { initial: Content }) {
   const [c, setC] = useState<Content>(initial);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const avatarInputRef = useRef<HTMLInputElement | null>(null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
   const [uploadingKind, setUploadingKind] = useState<null | "avatar" | "logo">(null);
 
-  async function uploadFile(file: File, kind: "avatar" | "logo") {
+  async function uploadFile(file: File, kind: "logo") {
     setUploadingKind(kind);
     setStatus({ kind: "idle" });
     try {
@@ -25,28 +24,58 @@ export function AdminEditor({ initial }: { initial: Content }) {
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Upload failed");
-      if (kind === "avatar") {
-        setC((prev) => ({
-          ...prev,
-          about: {
-            ...prev.about,
-            profile: { ...prev.about.profile, avatarUrl: data.url as string },
-          },
-        }));
-      } else {
-        setC((prev) => ({
-          ...prev,
-          meta: { ...prev.meta, logoUrl: data.url as string },
-        }));
-      }
+      setC((prev) => ({
+        ...prev,
+        meta: { ...prev.meta, logoUrl: data.url as string },
+      }));
       setStatus({ kind: "ok", msg: `Uploaded · click "Save changes" para mai-persist sa content.json` });
     } catch (e) {
       setStatus({ kind: "err", msg: e instanceof Error ? e.message : "Upload failed" });
     } finally {
       setUploadingKind(null);
-      if (kind === "avatar" && avatarInputRef.current) avatarInputRef.current.value = "";
-      if (kind === "logo" && logoInputRef.current) logoInputRef.current.value = "";
+      if (logoInputRef.current) logoInputRef.current.value = "";
     }
+  }
+
+  async function uploadAvatarImage(file: File) {
+    setUploadingKind("avatar");
+    setStatus({ kind: "idle" });
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("kind", "avatar");
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      setC((prev) => ({
+        ...prev,
+        about: {
+          ...prev.about,
+          profile: {
+            ...prev.about.profile,
+            avatarUrls: [...(prev.about.profile.avatarUrls ?? []), data.url as string],
+          },
+        },
+      }));
+      setStatus({ kind: "ok", msg: `Photo added · click "Save changes" para mai-persist.` });
+    } catch (e) {
+      setStatus({ kind: "err", msg: e instanceof Error ? e.message : "Upload failed" });
+    } finally {
+      setUploadingKind(null);
+    }
+  }
+
+  function removeAvatarImage(idx: number) {
+    setC((prev) => ({
+      ...prev,
+      about: {
+        ...prev.about,
+        profile: {
+          ...prev.about.profile,
+          avatarUrls: (prev.about.profile.avatarUrls ?? []).filter((_, i) => i !== idx),
+        },
+      },
+    }));
   }
 
   function clearAvatar() {
@@ -379,72 +408,74 @@ export function AdminEditor({ initial }: { initial: Content }) {
             <label>Objective (secondary line)</label>
             <textarea value={c.about.objectiveSecondary} onChange={(e) => setAbout({ objectiveSecondary: e.target.value })} />
           </div>
-          <div className="list-card-head">Profile photo</div>
-          <div className="list-card" style={{ display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
-            <div
-              style={{
-                width: 96,
-                height: 96,
-                borderRadius: 16,
-                overflow: "hidden",
-                background: "var(--accent-grad)",
-                display: "grid",
-                placeItems: "center",
-                color: "#fff",
-                fontFamily: '"Space Grotesk", sans-serif',
-                fontWeight: 700,
-                fontSize: 28,
-                flexShrink: 0,
-                boxShadow: "0 6px 18px -6px rgba(0,0,0,0.4)",
-                position: "relative",
-              }}
-            >
-              {c.about.profile.avatarUrl ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={c.about.profile.avatarUrl}
-                  alt="avatar preview"
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              ) : (
-                <span>{(c.meta.name.split(" ").map((s) => s[0]).slice(0, 2).join("") || "EA").toUpperCase()}</span>
-              )}
-            </div>
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <input
-                ref={avatarInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) void uploadFile(f, "avatar");
-                }}
-              />
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button
-                  type="button"
-                  className="btn-tiny"
-                  onClick={() => avatarInputRef.current?.click()}
-                  disabled={uploadingKind === "avatar"}
-                >
-                  {uploadingKind === "avatar" ? "Uploading…" : c.about.profile.avatarUrl ? "Replace photo" : "Upload photo"}
-                </button>
-                {c.about.profile.avatarUrl && (
-                  <button type="button" className="btn-tiny danger" onClick={clearAvatar}>
-                    Remove (back to monogram)
+          <div className="list-card-head">Profile photos (slider)</div>
+          <div className="list-card">
+            <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 14, fontFamily: '"JetBrains Mono", monospace' }}>
+              Upload multiple photos — they auto-rotate in the About section with a pixelated transition.
+            </p>
+            <div className="avatar-grid">
+              {(c.about.profile.avatarUrls ?? []).map((url, i) => (
+                <div key={i} className="avatar-thumb">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={url} alt={`Photo ${i + 1}`} />
+                  <button
+                    type="button"
+                    onClick={() => removeAvatarImage(i)}
+                    title="Remove"
+                  >
+                    ×
                   </button>
-                )}
-              </div>
-              <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8, fontFamily: '"JetBrains Mono", monospace' }}>
-                JPG · PNG · WebP · GIF — max 5 MB. Square photos render best.
-              </p>
-              {c.about.profile.avatarUrl && (
-                <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: '"JetBrains Mono", monospace', wordBreak: "break-all" }}>
-                  → {c.about.profile.avatarUrl}
-                </p>
-              )}
+                </div>
+              ))}
+              <label className="avatar-add">
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  hidden
+                  disabled={uploadingKind === "avatar"}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) void uploadAvatarImage(f);
+                    e.target.value = "";
+                  }}
+                />
+                {uploadingKind === "avatar" ? "Uploading…" : "+ Add photo"}
+              </label>
             </div>
+            {c.about.profile.avatarUrl && (
+              <div style={{ marginTop: 14, padding: 12, borderRadius: 10, background: "rgba(255,200,0,0.06)", border: "1px solid rgba(255,200,0,0.14)" }}>
+                <p style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: '"JetBrains Mono", monospace', margin: 0, wordBreak: "break-all" }}>
+                  Legacy single photo: {c.about.profile.avatarUrl}
+                </p>
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <button
+                    type="button"
+                    className="btn-tiny"
+                    onClick={() => {
+                      const url = c.about.profile.avatarUrl;
+                      if (url) {
+                        setC((prev) => ({
+                          ...prev,
+                          about: {
+                            ...prev.about,
+                            profile: {
+                              ...prev.about.profile,
+                              avatarUrls: [...(prev.about.profile.avatarUrls ?? []), url],
+                              avatarUrl: "",
+                            },
+                          },
+                        }));
+                      }
+                    }}
+                  >
+                    Migrate to slider
+                  </button>
+                  <button type="button" className="btn-tiny danger" onClick={clearAvatar}>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="list-card-head">Profile meta (4)</div>

@@ -1,7 +1,10 @@
+import Image from "next/image";
 import type { Content } from "@/lib/schema";
 import { ClientEffects, ThemeToggle } from "./ClientEffects";
 import { ContactForm } from "./ContactForm";
 import { DefaultLogoTag } from "./Logo";
+import { HorizontalScrollWrapper } from "./HorizontalScrollWrapper";
+import { ProfileSlider } from "./ProfileSlider";
 import {
   ArrowRight,
   FileIcon,
@@ -16,6 +19,8 @@ import {
   SocialLinkedIn,
 } from "./Icons";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+
 export function Portfolio({ content }: { content: Content }) {
   const c = content;
   const initials = c.meta.name
@@ -26,8 +31,29 @@ export function Portfolio({ content }: { content: Content }) {
     .toUpperCase();
   const firstName = c.meta.name.split(" ")[0];
 
+  const sliderImages = [
+    ...(c.about.profile.avatarUrls ?? []),
+    c.about.profile.avatarUrl,
+  ].filter(Boolean) as string[];
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: c.meta.name,
+            jobTitle: c.about.profile.role,
+            description: c.meta.description,
+            url: SITE_URL,
+          }),
+        }}
+      />
+
+      <a href="#top" className="skip-link">Skip to content</a>
+
       <div className="ambient" aria-hidden="true">
         <span className="orb o1" />
         <span className="orb o2" />
@@ -39,8 +65,18 @@ export function Portfolio({ content }: { content: Content }) {
       <nav className="nav glass" aria-label="Primary">
         <a href="#top" className="nav-logo">
           {c.meta.logoUrl ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img src={c.meta.logoUrl} alt={c.meta.name} className="logo-uploaded" />
+            c.meta.logoUrl.startsWith("/") ? (
+              <Image
+                src={c.meta.logoUrl}
+                alt={c.meta.name}
+                width={120}
+                height={40}
+                className="logo-uploaded"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={c.meta.logoUrl} alt={c.meta.name} className="logo-uploaded" />
+            )
           ) : (
             <DefaultLogoTag />
           )}
@@ -140,18 +176,8 @@ export function Portfolio({ content }: { content: Content }) {
             <div className="about-grid">
               <div className="profile-card glass reveal">
                 <div className="profile-avatar">
-                  {c.about.profile.avatarUrl ? (
-                    <>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={c.about.profile.avatarUrl}
-                        alt={c.meta.name}
-                        className="profile-photo"
-                      />
-                      <div className="photo-fuse" aria-hidden="true" />
-                      <div className="photo-tint" aria-hidden="true" />
-                      <div className="photo-vignette" aria-hidden="true" />
-                    </>
+                  {sliderImages.length > 0 ? (
+                    <ProfileSlider images={sliderImages} alt={c.meta.name} />
                   ) : (
                     <span className="initials">{initials}</span>
                   )}
@@ -192,129 +218,135 @@ export function Portfolio({ content }: { content: Content }) {
           </div>
         </section>
 
-        {/* SKILLS */}
-        <section id="skills" className="section">
-          <div className="shell">
-            <header className="section-head reveal">
-              <span className="eyebrow">02 · Toolkit</span>
-              <h2 className="section-title">
-                Skills, sharpened by <em className="grad-text">15 years of shipping</em>.
-              </h2>
-              <p className="section-sub">
-                Production-grade tools I reach for daily — and the deeper expertise that surrounds the code.
-              </p>
-            </header>
+        {/* HORIZONTAL SCROLL: Skills → Experience → Education */}
+        <HorizontalScrollWrapper>
+          {/* SKILLS */}
+          <section id="skills" className="h-panel">
+            <div className="h-number" aria-hidden="true">02</div>
+            <div className="shell h-panel-inner">
+              <header className="section-head h-reveal">
+                <span className="eyebrow">02 · Toolkit</span>
+                <h2 className="section-title">
+                  Skills, sharpened by <em className="grad-text">15 years of shipping</em>.
+                </h2>
+                <p className="section-sub">
+                  Production-grade tools I reach for daily — and the deeper expertise that surrounds the code.
+                </p>
+              </header>
 
-            <div className="skills-grid">
-              {c.skills.map((s, i) => {
-                const Icon = SkillIcons[s.iconKey] ?? SkillIcons.code;
-                return (
-                  <article key={i} className="skill-card glass reveal">
-                    <div className="skill-icon">
-                      <Icon />
-                    </div>
-                    <h3 className="skill-title">{s.title}</h3>
-                    <p style={{ color: "var(--text-soft)", fontSize: 14 }}>{s.description}</p>
-                    <div className="skill-tags">
-                      {s.tags.map((t, j) => (
-                        <span key={j} className="tag">{t}</span>
-                      ))}
-                    </div>
-                    <div className="skill-bar" data-w={`${s.proficiency}%`}>
-                      <span className="fill" />
-                    </div>
-                    <div className="skill-pct">PROFICIENCY · {s.proficiency}%</div>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* EXPERIENCE */}
-        <section id="experience" className="section">
-          <div className="shell">
-            <header className="section-head reveal">
-              <span className="eyebrow">03 · Experience</span>
-              <h2 className="section-title">
-                {c.experience.length}+ companies. <em className="grad-text">One discipline.</em>
-                <br />
-                Always shipping.
-              </h2>
-              <p className="section-sub">
-                A timeline of teams I&apos;ve contributed to — from my first PHP role at Brokerhouse Inc. to Henkel APSC&apos;s process expertise.
-              </p>
-            </header>
-
-            <div className="timeline">
-              {c.experience.map((exp, i) => (
-                <div key={i} className="tl-item reveal">
-                  <article className="tl-card glass-strong">
-                    <div className="tl-head">
-                      <div>
-                        <h3 className="tl-role">{exp.role}</h3>
-                        <div className="tl-company">{exp.company}</div>
+              <div className="skills-grid">
+                {c.skills.map((s, i) => {
+                  const Icon = SkillIcons[s.iconKey] ?? SkillIcons.code;
+                  return (
+                    <article key={i} className="skill-card glass h-reveal">
+                      <div className="skill-icon">
+                        <Icon />
                       </div>
-                      <span className="tl-period">{exp.period}</span>
-                    </div>
-                    <p className="tl-body">{exp.body}</p>
-                    <div className="tl-stack">
-                      {exp.stack.map((t, j) => (
-                        <span key={j} className="tag">{t}</span>
-                      ))}
-                    </div>
-                  </article>
-                </div>
-              ))}
+                      <h3 className="skill-title">{s.title}</h3>
+                      <p style={{ color: "var(--text-soft)", fontSize: 14 }}>{s.description}</p>
+                      <div className="skill-tags">
+                        {s.tags.map((t, j) => (
+                          <span key={j} className="tag">{t}</span>
+                        ))}
+                      </div>
+                      <div className="skill-bar" data-w={`${s.proficiency}%`}>
+                        <span className="fill" />
+                      </div>
+                      <div className="skill-pct">PROFICIENCY · {s.proficiency}%</div>
+                    </article>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* EDUCATION + TOOLS */}
-        <section id="education" className="section">
-          <div className="shell">
-            <header className="section-head reveal">
-              <span className="eyebrow">04 · Education &amp; Toolkit</span>
-              <h2 className="section-title">
-                Formal training, <em className="grad-text">forever sharpening</em>.
-              </h2>
-            </header>
+          {/* EXPERIENCE */}
+          <section id="experience" className="h-panel">
+            <div className="h-number" aria-hidden="true">03</div>
+            <div className="shell h-panel-inner">
+              <header className="section-head h-reveal">
+                <span className="eyebrow">03 · Experience</span>
+                <h2 className="section-title">
+                  {c.experience.length}+ companies. <em className="grad-text">One discipline.</em>
+                  <br />
+                  Always shipping.
+                </h2>
+                <p className="section-sub">
+                  A timeline of teams I&apos;ve contributed to — from my first PHP role at Brokerhouse Inc. to Henkel APSC&apos;s process expertise.
+                </p>
+              </header>
 
-            <div className="two-col">
-              <div className="panel glass reveal">
-                <h3 className="panel-title">
-                  <span>Education</span>
-                  <span className="num-tag">{String(c.education.length).padStart(2, "0")} entries</span>
-                </h3>
-                {c.education.map((e, i) => (
-                  <div key={i} className="edu-item">
-                    <span className="edu-period">{e.period}</span>
-                    <h4 className="edu-degree">{e.degree}</h4>
-                    <p className="edu-school">{e.school}</p>
+              <div className="timeline h-timeline">
+                {c.experience.map((exp, i) => (
+                  <div key={i} className="tl-item h-reveal">
+                    <article className="tl-card glass-strong">
+                      <div className="tl-head">
+                        <div>
+                          <h3 className="tl-role">{exp.role}</h3>
+                          <div className="tl-company">{exp.company}</div>
+                        </div>
+                        <span className="tl-period">{exp.period}</span>
+                      </div>
+                      <p className="tl-body">{exp.body}</p>
+                      <div className="tl-stack">
+                        {exp.stack.map((t, j) => (
+                          <span key={j} className="tag">{t}</span>
+                        ))}
+                      </div>
+                    </article>
                   </div>
                 ))}
               </div>
+            </div>
+          </section>
 
-              <div className="panel neu reveal">
-                <h3 className="panel-title">
-                  <span>Daily toolkit</span>
-                  <span className="num-tag">{String(c.tools.length).padStart(2, "0")} tools</span>
-                </h3>
-                <div className="tool-grid">
-                  {c.tools.map((t, i) => {
-                    const Icon = ToolIcons[t.iconKey] ?? ToolIcons.git;
-                    return (
-                      <div key={i} className="tool" title={t.name}>
-                        <Icon />
-                        <span>{t.name}</span>
-                      </div>
-                    );
-                  })}
+          {/* EDUCATION + TOOLS */}
+          <section id="education" className="h-panel">
+            <div className="h-number" aria-hidden="true">04</div>
+            <div className="shell h-panel-inner">
+              <header className="section-head h-reveal">
+                <span className="eyebrow">04 · Education &amp; Toolkit</span>
+                <h2 className="section-title">
+                  Formal training, <em className="grad-text">forever sharpening</em>.
+                </h2>
+              </header>
+
+              <div className="two-col">
+                <div className="panel glass h-reveal">
+                  <h3 className="panel-title">
+                    <span>Education</span>
+                    <span className="num-tag">{String(c.education.length).padStart(2, "0")} entries</span>
+                  </h3>
+                  {c.education.map((e, i) => (
+                    <div key={i} className="edu-item">
+                      <span className="edu-period">{e.period}</span>
+                      <h4 className="edu-degree">{e.degree}</h4>
+                      <p className="edu-school">{e.school}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="panel neu h-reveal">
+                  <h3 className="panel-title">
+                    <span>Daily toolkit</span>
+                    <span className="num-tag">{String(c.tools.length).padStart(2, "0")} tools</span>
+                  </h3>
+                  <div className="tool-grid">
+                    {c.tools.map((t, i) => {
+                      const Icon = ToolIcons[t.iconKey] ?? ToolIcons.git;
+                      return (
+                        <div key={i} className="tool" title={t.name}>
+                          <Icon />
+                          <span>{t.name}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </HorizontalScrollWrapper>
 
         {/* CONTACT */}
         <section id="contact" className="section">

@@ -64,7 +64,7 @@
 html, body { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter, "Inter"), system-ui, -apple-system, sans-serif;
   background: var(--bg-0);
   color: var(--text);
   line-height: 1.6;
@@ -74,7 +74,7 @@ body {
   transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 h1, h2, h3, h4 {
-  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-family: var(--font-space, "Space Grotesk"), "Inter", sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
   margin: 0;
@@ -143,7 +143,7 @@ h1, h2, h3, h4 {
 .shell { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 28px; }
 .section { position: relative; padding: 120px 0; }
 .eyebrow {
-  font-family: "JetBrains Mono", monospace;
+  font-family: var(--font-mono, "JetBrains Mono"), monospace;
   font-size: 12px; font-weight: 500;
   text-transform: uppercase; letter-spacing: 0.18em;
   color: var(--text-muted);
@@ -900,3 +900,151 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .btn-tiny:hover { color: var(--text); border-color: var(--accent); }
 .btn-tiny.danger { color: #ef4444; }
 .btn-tiny.danger:hover { background: rgba(239,68,68,0.08); border-color: #ef4444; }
+
+/* =========================================================
+   SKIP LINK (accessibility)
+   ========================================================= */
+.skip-link {
+  position: absolute; left: -9999px; top: 8px; z-index: 9999;
+  padding: 8px 16px; background: var(--accent); color: var(--bg-0);
+  border-radius: 6px; font-size: 14px; font-weight: 600;
+  text-decoration: none; white-space: nowrap;
+}
+.skip-link:focus { left: 8px; }
+
+/* =========================================================
+   HORIZONTAL SCROLL STAGE
+   ========================================================= */
+.h-stage { position: relative; background: var(--bg-0); }
+.h-track { display: flex; will-change: transform; }
+
+.h-panel {
+  position: relative; width: 100vw; min-height: 100vh;
+  flex-shrink: 0; display: flex; align-items: center;
+  overflow: hidden; padding: 80px 0;
+}
+
+.h-panel-inner { width: 100%; }
+
+/* Decorative large section number */
+.h-number {
+  position: absolute; bottom: 6%; right: 4%;
+  font-size: clamp(6rem, 18vw, 14rem); line-height: 0.8;
+  font-weight: 700;
+  font-family: var(--font-space, "Space Grotesk"), "Inter", sans-serif;
+  color: rgba(255, 255, 255, 0.035);
+  user-select: none; pointer-events: none;
+}
+[data-theme="light"] .h-number { color: rgba(0, 0, 0, 0.04); }
+
+/* Progress rail */
+.h-progress-rail {
+  position: absolute; right: clamp(18px, 3vw, 38px); top: 50%;
+  transform: translateY(-50%); width: 2px;
+  height: min(52vh, 460px); background: rgba(255, 255, 255, 0.12); z-index: 2;
+}
+[data-theme="light"] .h-progress-rail { background: rgba(0, 0, 0, 0.1); }
+.h-progress-bar {
+  width: 100%; height: 0%;
+  background: linear-gradient(to bottom, rgba(167, 139, 250, 0.15), var(--accent));
+  transform-origin: top center;
+}
+
+/* h-reveal: GSAP controls these; start hidden */
+.h-reveal { opacity: 0; transform: translateY(28px); }
+
+/* Experience panel: compact 2-col grid to fit all cards */
+.h-timeline {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.h-panel .tl-body { display: none; }
+.h-panel .tl-card { padding: 18px 20px; }
+
+/* Mobile: stack all panels vertically */
+@media (max-width: 767px) {
+  .h-track { flex-direction: column; }
+  .h-panel { width: 100%; min-height: auto; padding: 80px 0; }
+  .h-number { display: none; }
+  .h-progress-rail { display: none; }
+  .h-reveal { opacity: 1; transform: none; }
+  .h-timeline { grid-template-columns: 1fr; }
+  .h-panel .tl-body { display: block; }
+}
+
+/* =========================================================
+   PROFILE SLIDER
+   ========================================================= */
+.profile-slider {
+  position: absolute; inset: 0;
+  overflow: hidden; border-radius: inherit;
+}
+.profile-slider-bg {
+  position: absolute; inset: -24px; z-index: 0;
+  background-size: cover; background-position: center;
+  filter: blur(32px) saturate(2) brightness(0.5);
+  opacity: 0.65;
+  pointer-events: none;
+}
+.profile-slide {
+  position: absolute; inset: 0; z-index: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
+}
+.profile-slide.phase-leaving {
+  opacity: 0; transform: scale(1.04); filter: blur(6px);
+}
+.profile-slide.phase-entering {
+  animation: pixelReveal 0.7s ease-out forwards;
+}
+@keyframes pixelReveal {
+  0%   { opacity: 0.2; transform: scale(0.97); filter: contrast(10) saturate(8) brightness(1.8); }
+  25%  { opacity: 0.55; filter: contrast(5) saturate(5) brightness(1.4); }
+  60%  { opacity: 0.85; filter: contrast(2) saturate(2); transform: scale(0.99); }
+  100% { opacity: 1; transform: scale(1); filter: none; }
+}
+
+/* Slider position dots */
+.slider-dots {
+  position: absolute; bottom: 12px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 2;
+}
+.slider-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: background 0.3s, transform 0.3s;
+}
+.slider-dot.active {
+  background: #fff; transform: scale(1.3);
+}
+
+/* =========================================================
+   ADMIN AVATAR MULTI-IMAGE GRID
+   ========================================================= */
+.avatar-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+.avatar-thumb {
+  position: relative; width: 80px; height: 80px;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.avatar-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avatar-thumb button {
+  position: absolute; top: 4px; right: 4px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72); color: #fff; border: none;
+  cursor: pointer; font-size: 13px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; transition: background 0.2s;
+}
+.avatar-thumb button:hover { background: rgba(239, 68, 68, 0.85); }
+.avatar-add {
+  width: 80px; height: 80px; border-radius: 12px;
+  border: 1px dashed var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--text-muted); cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  font-family: var(--font-mono, "JetBrains Mono"), monospace;
+  text-align: center; line-height: 1.3;
+}
+.avatar-add:hover { border-color: var(--accent); color: var(--accent); }
