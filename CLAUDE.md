@@ -32,8 +32,13 @@ No test suite is configured.
 | `lib/auth.ts` | HMAC-SHA256 session tokens; password comparison uses `timingSafeEqual` |
 | `data/content.json` | Portfolio content (hero, about, skills, experience, education, tools, contact, meta) |
 | `app/globals.css` | Entire design system — CSS custom properties for glass/neumorphism tokens, dark/light themes, animated ambient orbs |
-| `components/ClientEffects.tsx` | Client-side: cursor glow, magnetic buttons, scroll-reveal, theme toggle |
-| `components/admin/AdminEditor.tsx` | Admin form UI — mirrors the Zod schema sections |
+| `app/layout.tsx` | Root layout — next/font (Space Grotesk, Inter, JetBrains Mono), SEO metadata, OG/Twitter tags |
+| `app/sitemap.ts` | Generates `/sitemap.xml` |
+| `app/robots.ts` | Generates `/robots.txt` |
+| `components/ClientEffects.tsx` | Client-side: cursor glow, magnetic buttons, scroll-reveal, theme toggle; excludes horizontal panel sections from navIO |
+| `components/HorizontalScrollWrapper.tsx` | GSAP ScrollTrigger horizontal scroll — pins Skills/Experience/Education panels and slides them; progress rail + per-panel reveal animations |
+| `components/ProfileSlider.tsx` | Auto-rotating multi-image carousel for the About profile photo; pixelated CSS transition |
+| `components/admin/AdminEditor.tsx` | Admin form UI — mirrors the Zod schema sections; multi-image avatar uploader |
 
 ### Authentication
 
@@ -58,6 +63,27 @@ Theme is stored in `localStorage` key `ea-theme` and set via `data-theme` attrib
 ### Path alias
 
 `@/*` maps to the project root (`./`). Use it for all internal imports.
+
+### GSAP horizontal scroll
+
+Skills → Experience → Education panels scroll horizontally after the About section; Contact + Footer return to vertical. Key rules:
+
+- `HorizontalScrollWrapper` uses **dynamic import** of `gsap`/`gsap/ScrollTrigger` inside `useEffect` (not at module level) to avoid SSR errors.
+- Panel reveal animations **must** use `gsap.fromTo()`, not `gsap.from()`. The CSS rule `.h-reveal { opacity: 0 }` means `gsap.from({ opacity: 0 })` reads the current CSS value as the "to" target and animates 0→0, leaving content permanently invisible.
+- `gsap.matchMedia("(min-width: 768px)")` gates the horizontal scroll; on mobile, panels stack vertically via CSS and `.h-reveal` elements are made visible with `opacity: 1; transform: none`.
+- `ClientEffects.tsx` excludes `#skills`, `#experience`, `#education` from its IntersectionObserver nav tracker — GSAP's `onUpdate` handles active-link state for those sections.
+
+### Profile photo slider
+
+`ProfileSlider` renders inside the existing `.profile-avatar` container. It uses a three-phase state machine (`idle → leaving → entering → idle`) to drive CSS class changes. The `bgSrc` blurred background is updated on index change. For local paths (starting with `/`) it uses `<Image fill>` from next/image; external URLs use a plain `<img>`.
+
+### Image upload
+
+`/api/upload` handles photo uploads (kind: `"avatar"` | `"logo"`). Avatar URLs are stored as `about.profile.avatarUrls: string[]` in the schema; the legacy single `avatarUrl` is kept as fallback. The slider combines both: `[...avatarUrls, avatarUrl].filter(Boolean)`.
+
+### Deployment
+
+`vercel.json` sets region `sin1` (Singapore). `NEXT_PUBLIC_SITE_URL` must be set as a Vercel environment variable for correct OG/sitemap URLs. Git push to the connected branch auto-deploys.
 
 ### Legacy
 

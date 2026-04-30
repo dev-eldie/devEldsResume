@@ -123,11 +123,7 @@ export function ClientEffects() {
     document.querySelectorAll<HTMLElement>(".skill-bar").forEach((el) => sIO.observe(el));
 
     // ---------- ACTIVE NAV LINK ----------
-    // GSAP handles skills/experience/education via HorizontalScrollWrapper onUpdate
-    const HORIZ_IDS = new Set(["skills", "experience", "education"]);
-    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]")).filter(
-      (s) => !HORIZ_IDS.has(s.id)
-    );
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
     const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
     const navIO = new IntersectionObserver(
       (entries) => {
