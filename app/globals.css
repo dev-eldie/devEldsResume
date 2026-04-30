@@ -915,7 +915,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* =========================================================
    HORIZONTAL SCROLL STAGE
    ========================================================= */
-.h-stage { position: relative; background: var(--bg-0); }
+.h-stage { position: relative; }
 .h-track { display: flex; will-change: transform; }
 
 .h-panel {
