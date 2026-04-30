@@ -136,8 +136,7 @@ export function ClientEffects() {
       },
       { threshold: 0.35, rootMargin: "-20% 0px -50% 0px" }
     );
-    const horizIds = new Set(["about", "skills", "experience", "education"]);
-    sections.filter((s) => !horizIds.has(s.id)).forEach((s) => navIO.observe(s));
+    sections.forEach((s) => navIO.observe(s));
 
     // ---------- TILT ----------
     const tilts = document.querySelectorAll<HTMLElement>(".stat-card, .skill-card, .tl-card");
