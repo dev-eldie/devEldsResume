@@ -36,7 +36,7 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
               invalidateOnRefresh: true,
               onUpdate(self) {
                 const idx = Math.round(self.progress * (panels.length - 1));
-                const ids = ["skills", "experience", "education"];
+                const ids = ["about", "skills", "experience", "education"];
                 document.querySelectorAll<HTMLElement>(".nav-link").forEach((l) => {
                   l.classList.toggle("active", l.getAttribute("href") === "#" + ids[idx]);
                 });

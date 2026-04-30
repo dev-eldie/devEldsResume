@@ -19,9 +19,11 @@ No test suite is configured.
 
 ### Data flow
 
-1. `/` — Server component reads content via `lib/content.ts` → renders `components/Portfolio.tsx`
+1. `/` — Server component reads content via `lib/content.ts` → renders `components/Portfolio.tsx`; marked `force-dynamic` so it's never cached
 2. `/admin` — Auth-gated editor; fetches/saves content through `/api/content` (GET/PUT)
-3. `/api/contact` — Forwards contact form submissions to an email via Resend
+3. `/api/login` (POST) — Validates password, sets `SESSION_COOKIE` httpOnly cookie; `force-dynamic`
+4. `/api/logout` (POST) — Deletes session cookie; `force-dynamic`
+5. `/api/contact` — Forwards contact form submissions to an email via Resend
 
 ### Key files
 
@@ -39,6 +41,9 @@ No test suite is configured.
 | `components/HorizontalScrollWrapper.tsx` | GSAP ScrollTrigger horizontal scroll — pins Skills/Experience/Education panels and slides them; progress rail + per-panel reveal animations |
 | `components/ProfileSlider.tsx` | Auto-rotating multi-image carousel for the About profile photo; pixelated CSS transition |
 | `components/admin/AdminEditor.tsx` | Admin form UI — mirrors the Zod schema sections; multi-image avatar uploader |
+| `components/ContactForm.tsx` | Client-side form; validates name/email/message, posts to `/api/contact`, shows aria-live status |
+| `components/Logo.tsx` | Two exports: `DefaultLogoTag` (JSX-tag `⟨ EA /⟩` pill) and `DefaultLogoBare` (SVG, optional `size` prop, default 56px) |
+| `components/Icons.tsx` | SVG icon set (ArrowRight, FileIcon, SendIcon, PhoneIcon, MailIcon, GlobeIcon, PinIcon, SunIcon, …) |
 
 ### Authentication
 
@@ -47,11 +52,14 @@ Password from `ADMIN_PASSWORD` env var → compared with `timingSafeEqual` → H
 ### Environment variables
 
 ```
-ADMIN_PASSWORD          # Admin login password
-SESSION_SECRET          # HMAC secret (≥ 32 chars in prod)
-RESEND_API_KEY          # Resend email API key
-KV_REST_API_URL         # Upstash Redis REST URL
-KV_REST_API_TOKEN       # Upstash Redis REST token
+ADMIN_PASSWORD              # Admin login password
+SESSION_SECRET              # HMAC secret (≥ 32 chars in prod)
+RESEND_API_KEY              # Resend email API key
+KV_REST_API_URL             # Upstash Redis REST URL
+KV_REST_API_TOKEN           # Upstash Redis REST token
+KV_REST_API_READ_ONLY_TOKEN # Upstash read-only token (optional)
+KV_URL                      # Upstash Redis connection string (alias REDIS_URL)
+NEXT_PUBLIC_SITE_URL        # Public site URL for OG tags and sitemap
 ```
 
 When `KV_REST_API_URL` is absent, `lib/content.ts` reads/writes `data/content.json` directly — this is the local dev path.
@@ -79,7 +87,11 @@ Skills → Experience → Education panels scroll horizontally after the About s
 
 ### Image upload
 
-`/api/upload` handles photo uploads (kind: `"avatar"` | `"logo"`). Avatar URLs are stored as `about.profile.avatarUrls: string[]` in the schema; the legacy single `avatarUrl` is kept as fallback. The slider combines both: `[...avatarUrls, avatarUrl].filter(Boolean)`.
+`/api/upload` handles photo uploads (kind: `"avatar"` | `"logo"`). Accepts multipart FormData with `file` and `kind` fields; validates MIME type (jpeg, png, webp, gif, svg+xml) and enforces 5 MB max. Files are saved to `public/uploads/` with timestamp-prefixed names and returned as `/uploads/{kind}-{timestamp}.{ext}`. Avatar URLs are stored as `about.profile.avatarUrls: string[]` in the schema; the legacy single `avatarUrl` is kept as fallback. The slider combines both: `[...avatarUrls, avatarUrl].filter(Boolean)`.
+
+### Image optimization
+
+`next.config.mjs` enables AVIF + WebP formats and allows **all** HTTPS remote hostnames (`hostname: "**"`). This means any external URL can be used with `<Image>` — intentional for user-supplied content but worth keeping in mind.
 
 ### Deployment
 
