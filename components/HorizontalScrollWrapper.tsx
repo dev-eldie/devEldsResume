@@ -17,6 +17,9 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
 
       gsap.registerPlugin(ScrollTrigger);
 
+      const stage = stageRef.current;
+      if (!stage) return;
+
       ctx = gsap.context(() => {
         const panels = gsap.utils.toArray<HTMLElement>(".h-panel");
         if (!panels.length) return;
@@ -24,21 +27,33 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
         const mm = gsap.matchMedia();
 
         mm.add("(min-width: 768px)", () => {
+          const n = panels.length;
+          const ids = ["skills", "experience", "education"];
+
           const tween = gsap.to(panels, {
-            xPercent: -100 * (panels.length - 1),
+            xPercent: -100 * (n - 1),
             ease: "none",
             scrollTrigger: {
-              trigger: "#horizontal-stage",
+              trigger: stage,
               pin: true,
               scrub: 1,
               start: "top top",
-              end: () => "+=" + window.innerWidth * (panels.length - 1),
+              end: () => "+=" + window.innerWidth * (n - 1),
               invalidateOnRefresh: true,
               onUpdate(self) {
-                const idx = Math.round(self.progress * (panels.length - 1));
-                const ids = ["about", "skills", "experience", "education"];
+                const p = self.progress;
+                let bestIdx = 0;
+                let bestOverlap = -1;
+                for (let i = 0; i < n; i++) {
+                  const left = i - (n - 1) * p;
+                  const overlap = Math.max(0, Math.min(1, left + 1) - Math.max(0, left));
+                  if (overlap > bestOverlap) {
+                    bestOverlap = overlap;
+                    bestIdx = i;
+                  }
+                }
                 document.querySelectorAll<HTMLElement>(".nav-link").forEach((l) => {
-                  l.classList.toggle("active", l.getAttribute("href") === "#" + ids[idx]);
+                  l.classList.toggle("active", l.getAttribute("href") === "#" + ids[bestIdx]);
                 });
               },
             },
@@ -49,9 +64,9 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
               height: "100%",
               ease: "none",
               scrollTrigger: {
-                trigger: "#horizontal-stage",
+                trigger: stage,
                 start: "top top",
-                end: () => "+=" + window.innerWidth * (panels.length - 1),
+                end: () => "+=" + window.innerWidth * (n - 1),
                 scrub: true,
               },
             });
@@ -72,8 +87,8 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
                 scrollTrigger: {
                   trigger: panel,
                   containerAnimation: tween,
-                  start: "left 70%",
-                  toggleActions: "play none none none",
+                  start: "left 80%",
+                  toggleActions: "play none none reverse",
                 },
               }
             );

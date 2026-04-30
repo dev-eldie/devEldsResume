@@ -919,7 +919,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .h-track { display: flex; will-change: transform; }
 
 .h-panel {
-  position: relative; width: 100vw; min-height: 100vh;
+  position: relative; width: 100vw; height: 100dvh;
   flex-shrink: 0; display: flex; align-items: center;
   overflow: hidden; padding: 80px 0;
 }
@@ -965,7 +965,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* Mobile: stack all panels vertically */
 @media (max-width: 767px) {
   .h-track { flex-direction: column; }
-  .h-panel { width: 100%; min-height: auto; padding: 80px 0; }
+  .h-panel { width: 100%; height: auto; padding: 80px 0; }
   .h-number { display: none; }
   .h-progress-rail { display: none; }
   .h-reveal { opacity: 1; transform: none; }
