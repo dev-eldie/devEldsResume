@@ -60,19 +60,23 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
           panels.forEach((panel) => {
             const items = panel.querySelectorAll(".h-reveal");
             if (!items.length) return;
-            gsap.from(items, {
-              opacity: 0,
-              y: 40,
-              stagger: 0.07,
-              duration: 0.85,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: tween,
-                start: "left 70%",
-                toggleActions: "play none none reverse",
-              },
-            });
+            gsap.fromTo(
+              items,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                stagger: 0.07,
+                duration: 0.85,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: panel,
+                  containerAnimation: tween,
+                  start: "left 70%",
+                  toggleActions: "play none none none",
+                },
+              }
+            );
           });
 
           ScrollTrigger.refresh();
