@@ -97,12 +97,12 @@ export function Portfolio({ content }: { content: Content }) {
         {/* HERO */}
         <section className="hero">
           <div className="shell">
-            <span className="hero-status reveal">
+            <span className="hero-status">
               <span className="pulse-dot" />
               {c.hero.statusText}
             </span>
 
-            <h1 className="hero-title reveal">
+            <h1 className="hero-title">
               {c.hero.title.l1}
               <br />
               <span className="grad-text">{c.hero.title.l2grad}</span> &amp;
@@ -114,10 +114,10 @@ export function Portfolio({ content }: { content: Content }) {
             <div className="hero-row">
               <div>
                 <p
-                  className="hero-blurb reveal"
+                  className="hero-blurb"
                   dangerouslySetInnerHTML={{ __html: c.hero.blurb }}
                 />
-                <div className="hero-actions reveal">
+                <div className="hero-actions">
                   <a href="#contact" className="btn btn-primary" data-magnetic>
                     <span>Start a project</span>
                     <ArrowRight />
@@ -129,7 +129,7 @@ export function Portfolio({ content }: { content: Content }) {
                 </div>
               </div>
 
-              <div className="hero-meta reveal">
+              <div className="hero-meta">
                 {c.hero.stats.map((s, i) => (
                   <div key={i} className="stat-card neu-soft">
                     <div className="num">
@@ -142,7 +142,7 @@ export function Portfolio({ content }: { content: Content }) {
               </div>
             </div>
 
-            <div className="scroll-cue reveal">
+            <div className="scroll-cue">
               <span className="line" /> Scroll to explore
             </div>
           </div>
