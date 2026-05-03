@@ -114,32 +114,11 @@
   ],
   "experience": [
     {
-      "role": "Process Expert · Front-End Developer",
-      "company": "HENKEL ASIA PACIFIC SERVICE CENTRE",
-      "period": "Mar 2020 — Jan 2025",
-      "body": "Collaborated with stakeholders to design and maintain internal calculators and UI/UX for web applications. Used React.js and vanilla JavaScript to enhance user experience across global tooling.",
-      "stack": ["React.js", "JavaScript", "UI/UX", "Process Design"]
-    },
-    {
-      "role": "Front-End Developer · UI/UX Designer",
-      "company": "SIGWAY HIGGS GROUPS LIMITED",
-      "period": "Mar 2018 — May 2019",
-      "body": "Developed custom WordPress themes and plugins, ensuring pixel-perfect designs. Converted PSDs to responsive HTML with a focus on UI/UX enhancements.",
-      "stack": ["WordPress", "PHP", "PSD → HTML", "Pixel-perfect"]
-    },
-    {
-      "role": "Front-End Developer · Graphic Designer",
-      "company": "SOURCEFIT PHILIPPINES",
-      "period": "Jul 2016 — Oct 2017",
-      "body": "Created custom templates and post types based on mockups. Designed and developed website functionalities and optimized sites for SEO. Produced graphics and logos for in-house projects.",
-      "stack": ["WordPress", "SEO", "Graphic Design", "Branding"]
-    },
-    {
-      "role": "Front-End Developer",
-      "company": "OUTSOURCED QUALITY ASSURED SERVICES",
-      "period": "May 2015 — Apr 2016",
-      "body": "Advocated for web interaction best practices with a focus on consistency and usability. Built reusable code libraries and validated user input. Worked on an e-commerce platform for an Australian client, customizing functionalities with JavaScript.",
-      "stack": ["JavaScript", "E-commerce", "Component Libraries"]
+      "role": "PHP Developer · Web & Graphic Designer",
+      "company": "BROKERHOUSE INC.",
+      "period": "May 2010 — Feb 2011",
+      "body": "First professional role — built dynamic websites with PHP and MySQL, hand-coded HTML/CSS/JavaScript front-ends, and produced supporting visuals. Designed page layouts, logos, and marketing collateral that aligned with each client's brand. The foundation that shaped everything I do today.",
+      "stack": ["PHP", "MySQL", "HTML/CSS", "JavaScript", "Photoshop", "Illustrator"]
     },
     {
       "role": "Lead Front-End Developer",
@@ -149,18 +128,32 @@
       "stack": ["Leadership", "JavaScript", "E-commerce", "Code Architecture"]
     },
     {
-      "role": "PHP Developer · Web & Graphic Designer",
-      "company": "BROKERHOUSE INC.",
-      "period": "May 2010 — Feb 2011",
-      "body": "First professional role — built dynamic websites with PHP and MySQL, hand-coded HTML/CSS/JavaScript front-ends, and produced supporting visuals. Designed page layouts, logos, and marketing collateral that aligned with each client's brand. The foundation that shaped everything I do today.",
-      "stack": [
-        "PHP",
-        "MySQL",
-        "HTML/CSS",
-        "JavaScript",
-        "Photoshop",
-        "Illustrator"
-      ]
+      "role": "Front-End Developer",
+      "company": "OUTSOURCED QUALITY ASSURED SERVICES",
+      "period": "May 2015 — Apr 2016",
+      "body": "Advocated for web interaction best practices with a focus on consistency and usability. Built reusable code libraries and validated user input. Worked on an e-commerce platform for an Australian client, customizing functionalities with JavaScript.",
+      "stack": ["JavaScript", "E-commerce", "Component Libraries"]
+    },
+    {
+      "role": "Front-End Developer · Graphic Designer",
+      "company": "SOURCEFIT PHILIPPINES",
+      "period": "Jul 2016 — Oct 2017",
+      "body": "Created custom templates and post types based on mockups. Designed and developed website functionalities and optimized sites for SEO. Produced graphics and logos for in-house projects.",
+      "stack": ["WordPress", "SEO", "Graphic Design", "Branding"]
+    },
+    {
+      "role": "Front-End Developer · UI/UX Designer",
+      "company": "SIGWAY HIGGS GROUPS LIMITED",
+      "period": "Mar 2018 — May 2019",
+      "body": "Developed custom WordPress themes and plugins, ensuring pixel-perfect designs. Converted PSDs to responsive HTML with a focus on UI/UX enhancements.",
+      "stack": ["WordPress", "PHP", "PSD → HTML", "Pixel-perfect"]
+    },
+    {
+      "role": "Process Expert · Front-End Developer",
+      "company": "HENKEL ASIA PACIFIC SERVICE CENTRE",
+      "period": "Mar 2020 — Jan 2025",
+      "body": "Collaborated with stakeholders to design and maintain internal calculators and UI/UX for web applications. Used React.js and vanilla JavaScript to enhance user experience across global tooling.",
+      "stack": ["React.js", "JavaScript", "UI/UX", "Process Design"]
     }
   ],
   "education": [
