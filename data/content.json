@@ -94,37 +94,21 @@
       "iconKey": "commerce",
       "title": "Shopify & Liquid",
       "description": "Custom themes, sections, snippets, theme app extensions, and storefront customization.",
-      "tags": [
-        "Shopify",
-        "Liquid",
-        "Theme Dev",
-        "Sections",
-        "Storefront"
-      ],
+      "tags": ["Shopify", "Liquid", "Theme Dev", "Sections", "Storefront"],
       "proficiency": 88
     },
     {
       "iconKey": "cms",
       "title": "CMS & Backend",
       "description": "Custom WP themes, plugins, server-side rendering, data modeling.",
-      "tags": [
-        "WordPress",
-        "PHP",
-        "MySQL",
-        "Java EE"
-      ],
+      "tags": ["WordPress", "PHP", "MySQL", "Java EE"],
       "proficiency": 86
     },
     {
       "iconKey": "creative",
       "title": "Creative Direction",
       "description": "Brand storytelling, visual identity, art direction across surfaces.",
-      "tags": [
-        "Branding",
-        "Art Direction",
-        "Team Collab",
-        "Social Marketing"
-      ],
+      "tags": ["Branding", "Art Direction", "Team Collab", "Social Marketing"],
       "proficiency": 80
     }
   ],
@@ -134,59 +118,35 @@
       "company": "HENKEL ASIA PACIFIC SERVICE CENTRE",
       "period": "Mar 2020 — Jan 2025",
       "body": "Collaborated with stakeholders to design and maintain internal calculators and UI/UX for web applications. Used React.js and vanilla JavaScript to enhance user experience across global tooling.",
-      "stack": [
-        "React.js",
-        "JavaScript",
-        "UI/UX",
-        "Process Design"
-      ]
+      "stack": ["React.js", "JavaScript", "UI/UX", "Process Design"]
     },
     {
       "role": "Front-End Developer · UI/UX Designer",
       "company": "SIGWAY HIGGS GROUPS LIMITED",
       "period": "Mar 2018 — May 2019",
       "body": "Developed custom WordPress themes and plugins, ensuring pixel-perfect designs. Converted PSDs to responsive HTML with a focus on UI/UX enhancements.",
-      "stack": [
-        "WordPress",
-        "PHP",
-        "PSD → HTML",
-        "Pixel-perfect"
-      ]
+      "stack": ["WordPress", "PHP", "PSD → HTML", "Pixel-perfect"]
     },
     {
       "role": "Front-End Developer · Graphic Designer",
       "company": "SOURCEFIT PHILIPPINES",
       "period": "Jul 2016 — Oct 2017",
       "body": "Created custom templates and post types based on mockups. Designed and developed website functionalities and optimized sites for SEO. Produced graphics and logos for in-house projects.",
-      "stack": [
-        "WordPress",
-        "SEO",
-        "Graphic Design",
-        "Branding"
-      ]
+      "stack": ["WordPress", "SEO", "Graphic Design", "Branding"]
     },
     {
       "role": "Front-End Developer",
       "company": "OUTSOURCED QUALITY ASSURED SERVICES",
       "period": "May 2015 — Apr 2016",
       "body": "Advocated for web interaction best practices with a focus on consistency and usability. Built reusable code libraries and validated user input. Worked on an e-commerce platform for an Australian client, customizing functionalities with JavaScript.",
-      "stack": [
-        "JavaScript",
-        "E-commerce",
-        "Component Libraries"
-      ]
+      "stack": ["JavaScript", "E-commerce", "Component Libraries"]
     },
     {
       "role": "Lead Front-End Developer",
       "company": "BIG SKY GROUP",
       "period": "Mar 2011 — Feb 2015",
       "body": "Led front-end work across multiple e-commerce and content sites. Built reusable code libraries, validated user input, and drove a culture of consistency and usability across teams.",
-      "stack": [
-        "Leadership",
-        "JavaScript",
-        "E-commerce",
-        "Code Architecture"
-      ]
+      "stack": ["Leadership", "JavaScript", "E-commerce", "Code Architecture"]
     },
     {
       "role": "PHP Developer · Web & Graphic Designer",

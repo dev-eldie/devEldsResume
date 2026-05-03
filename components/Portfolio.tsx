@@ -50,7 +50,9 @@ export function Portfolio({ content }: { content: Content }) {
         }}
       />
 
-      <a href="#top" className="skip-link">Skip to content</a>
+      <a href="#top" className="skip-link">
+        Skip to content
+      </a>
 
       <div className="ambient" aria-hidden="true">
         <span className="orb o1" />
@@ -67,28 +69,58 @@ export function Portfolio({ content }: { content: Content }) {
             const lightSrc = c.meta.logoLightUrl || c.meta.logoUrl || "";
             // Use plain <img> for logos — next/image AVIF conversion corrupts alpha channels on sharp graphics
             // eslint-disable-next-line @next/next/no-img-element
-            const renderImg = (src: string, cls: string) =>
-              <img key={cls} src={src} alt={c.meta.name} className={`logo-uploaded ${cls}`} />;
+            const renderImg = (src: string, cls: string) => (
+              <img
+                key={cls}
+                src={src}
+                alt={c.meta.name}
+                className={`logo-uploaded ${cls}`}
+              />
+            );
             if (!darkSrc && !lightSrc) return <DefaultLogoTag />;
             if (darkSrc === lightSrc) return renderImg(darkSrc, "");
             return (
               <>
-                {darkSrc ? renderImg(darkSrc, "logo-theme-dark") : <span className="logo-theme-dark"><DefaultLogoTag /></span>}
-                {lightSrc ? renderImg(lightSrc, "logo-theme-light") : <span className="logo-theme-light"><DefaultLogoTag /></span>}
+                {darkSrc ? (
+                  renderImg(darkSrc, "logo-theme-dark")
+                ) : (
+                  <span className="logo-theme-dark">
+                    <DefaultLogoTag />
+                  </span>
+                )}
+                {lightSrc ? (
+                  renderImg(lightSrc, "logo-theme-light")
+                ) : (
+                  <span className="logo-theme-light">
+                    <DefaultLogoTag />
+                  </span>
+                )}
               </>
             );
           })()}
         </a>
         <div className="nav-links">
-          <a className="nav-link active" href="#about">About</a>
-          <a className="nav-link" href="#skills">Skills</a>
-          <a className="nav-link" href="#experience">Experience</a>
-          <a className="nav-link" href="#education">Education</a>
-          <a className="nav-link" href="#contact">Contact</a>
+          <a className="nav-link active" href="#about">
+            About
+          </a>
+          <a className="nav-link" href="#skills">
+            Skills
+          </a>
+          <a className="nav-link" href="#experience">
+            Experience
+          </a>
+          <a className="nav-link" href="#education">
+            Education
+          </a>
+          <a className="nav-link" href="#contact">
+            Contact
+          </a>
         </div>
         <div className="nav-actions">
           <ThemeToggle />
-          <a href="#contact" className="nav-cta">Let&apos;s talk</a>
+          <a href="#contact" className="nav-cta">
+            Let&apos;s talk
+          </a>
         </div>
       </nav>
 
@@ -209,7 +241,9 @@ export function Portfolio({ content }: { content: Content }) {
                 </p>
                 <div className="signature">
                   <span className="sig-mark">{initials}</span>
-                  <span className="meta-text">— {firstName} · 2011 – present</span>
+                  <span className="meta-text">
+                    — {firstName} · 2010 – present
+                  </span>
                 </div>
               </div>
             </div>
@@ -218,17 +252,18 @@ export function Portfolio({ content }: { content: Content }) {
 
         {/* HORIZONTAL SCROLL: Skills → Experience → Education */}
         <HorizontalScrollWrapper>
-
           {/* SKILLS */}
           <section id="skills" className="h-panel">
             <div className="shell">
               <header className="section-head h-reveal">
                 <span className="eyebrow">Toolkit</span>
                 <h2 className="section-title">
-                  Skills, sharpened by <em className="grad-text">15 years of shipping</em>.
+                  Skills, sharpened by{" "}
+                  <em className="grad-text">16 years of shipping</em>.
                 </h2>
                 <p className="section-sub">
-                  Production-grade tools I reach for daily — and the deeper expertise behind the code.
+                  Production-grade tools I reach for daily — and the deeper
+                  expertise behind the code.
                 </p>
               </header>
               <div className="skills-grid">
@@ -236,12 +271,18 @@ export function Portfolio({ content }: { content: Content }) {
                   const Icon = SkillIcons[s.iconKey] ?? SkillIcons.code;
                   return (
                     <article key={i} className="skill-card glass h-reveal">
-                      <div className="skill-icon"><Icon /></div>
+                      <div className="skill-icon">
+                        <Icon />
+                      </div>
                       <h3 className="skill-title">{s.title}</h3>
-                      <p style={{ color: "var(--text-soft)", fontSize: 14 }}>{s.description}</p>
+                      <p style={{ color: "var(--text-soft)", fontSize: 14 }}>
+                        {s.description}
+                      </p>
                       <div className="skill-tags">
                         {s.tags.map((t, j) => (
-                          <span key={j} className="tag">{t}</span>
+                          <span key={j} className="tag">
+                            {t}
+                          </span>
                         ))}
                       </div>
                       <div
@@ -255,7 +296,9 @@ export function Portfolio({ content }: { content: Content }) {
                       >
                         <span className="fill" />
                       </div>
-                      <div className="skill-pct">PROFICIENCY · {s.proficiency}%</div>
+                      <div className="skill-pct">
+                        PROFICIENCY · {s.proficiency}%
+                      </div>
                     </article>
                   );
                 })}
@@ -269,11 +312,15 @@ export function Portfolio({ content }: { content: Content }) {
               <header className="section-head h-reveal">
                 <span className="eyebrow">Experience</span>
                 <h2 className="section-title">
-                  {c.experience.length}+ companies. <em className="grad-text">One discipline.</em>
-                  <br />Always shipping.
+                  {c.experience.length}+ companies.{" "}
+                  <em className="grad-text">One discipline.</em>
+                  <br />
+                  Always shipping.
                 </h2>
                 <p className="section-sub">
-                  A timeline of teams I&apos;ve contributed to — from my first PHP role at Brokerhouse Inc. to Henkel APSC&apos;s process expertise.
+                  A timeline of teams I&apos;ve contributed to — from my first
+                  PHP role at Brokerhouse Inc. to Henkel APSC&apos;s process
+                  expertise.
                 </p>
               </header>
               <div className="h-timeline">
@@ -290,7 +337,9 @@ export function Portfolio({ content }: { content: Content }) {
                       <p className="tl-body">{exp.body}</p>
                       <div className="tl-stack">
                         {exp.stack.map((t, j) => (
-                          <span key={j} className="tag">{t}</span>
+                          <span key={j} className="tag">
+                            {t}
+                          </span>
                         ))}
                       </div>
                     </article>
@@ -306,14 +355,17 @@ export function Portfolio({ content }: { content: Content }) {
               <header className="section-head h-reveal">
                 <span className="eyebrow">Education &amp; Toolkit</span>
                 <h2 className="section-title">
-                  Formal training, <em className="grad-text">forever sharpening</em>.
+                  Formal training,{" "}
+                  <em className="grad-text">forever sharpening</em>.
                 </h2>
               </header>
               <div className="two-col">
                 <div className="panel glass h-reveal">
                   <h3 className="panel-title">
                     <span>Education</span>
-                    <span className="num-tag">{String(c.education.length).padStart(2, "0")} entries</span>
+                    <span className="num-tag">
+                      {String(c.education.length).padStart(2, "0")} entries
+                    </span>
                   </h3>
                   {c.education.map((e, i) => (
                     <div key={i} className="edu-item">
@@ -326,7 +378,9 @@ export function Portfolio({ content }: { content: Content }) {
                 <div className="panel neu h-reveal">
                   <h3 className="panel-title">
                     <span>Daily toolkit</span>
-                    <span className="num-tag">{String(c.tools.length).padStart(2, "0")} tools</span>
+                    <span className="num-tag">
+                      {String(c.tools.length).padStart(2, "0")} tools
+                    </span>
                   </h3>
                   <div className="tool-grid">
                     {c.tools.map((t, i) => {
@@ -343,7 +397,6 @@ export function Portfolio({ content }: { content: Content }) {
               </div>
             </div>
           </section>
-
         </HorizontalScrollWrapper>
 
         {/* CONTACT */}
@@ -361,29 +414,51 @@ export function Portfolio({ content }: { content: Content }) {
 
             <div className="contact-grid">
               <aside className="reveal">
-                <a href={`tel:${c.contact.phone.replace(/[^\d+]/g, "")}`} className="contact-row" data-magnetic>
-                  <div className="contact-icon"><PhoneIcon /></div>
+                <a
+                  href={`tel:${c.contact.phone.replace(/[^\d+]/g, "")}`}
+                  className="contact-row"
+                  data-magnetic
+                >
+                  <div className="contact-icon">
+                    <PhoneIcon />
+                  </div>
                   <div>
                     <div className="label">Phone</div>
                     <div className="value">{c.contact.phone}</div>
                   </div>
                 </a>
-                <a href={`mailto:${c.contact.email}`} className="contact-row" data-magnetic>
-                  <div className="contact-icon"><MailIcon /></div>
+                <a
+                  href={`mailto:${c.contact.email}`}
+                  className="contact-row"
+                  data-magnetic
+                >
+                  <div className="contact-icon">
+                    <MailIcon />
+                  </div>
                   <div>
                     <div className="label">Email</div>
                     <div className="value">{c.contact.email}</div>
                   </div>
                 </a>
-                <a href={c.contact.portfolioUrl} target="_blank" rel="noopener noreferrer" className="contact-row" data-magnetic>
-                  <div className="contact-icon"><GlobeIcon /></div>
+                <a
+                  href={c.contact.portfolioUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-row"
+                  data-magnetic
+                >
+                  <div className="contact-icon">
+                    <GlobeIcon />
+                  </div>
                   <div>
                     <div className="label">Portfolio</div>
                     <div className="value">{c.contact.portfolio}</div>
                   </div>
                 </a>
                 <a href="#" className="contact-row" data-magnetic>
-                  <div className="contact-icon"><PinIcon /></div>
+                  <div className="contact-icon">
+                    <PinIcon />
+                  </div>
                   <div>
                     <div className="label">Location</div>
                     <div className="value">{c.contact.location}</div>
@@ -396,7 +471,8 @@ export function Portfolio({ content }: { content: Content }) {
                 <div className="connect-panel-head">
                   <h3 className="connect-panel-title">Let&apos;s connect</h3>
                   <p className="connect-panel-sub">
-                    Pick your preferred channel — I respond within 24 hours, Mon–Fri.
+                    Pick your preferred channel — I respond within 24 hours,
+                    Mon–Fri.
                   </p>
                 </div>
 
@@ -406,12 +482,18 @@ export function Portfolio({ content }: { content: Content }) {
                   data-magnetic
                   aria-label={`Call or WhatsApp ${c.contact.phone}`}
                 >
-                  <div className="connect-card-icon" aria-hidden="true"><PhoneIcon /></div>
+                  <div className="connect-card-icon" aria-hidden="true">
+                    <PhoneIcon />
+                  </div>
                   <div className="connect-card-body">
-                    <strong className="connect-card-title">Call or WhatsApp</strong>
+                    <strong className="connect-card-title">
+                      Call or WhatsApp
+                    </strong>
                     <span className="connect-card-sub">{c.contact.phone}</span>
                   </div>
-                  <span className="connect-card-arrow" aria-hidden="true"><ArrowRight /></span>
+                  <span className="connect-card-arrow" aria-hidden="true">
+                    <ArrowRight />
+                  </span>
                 </a>
 
                 <a
@@ -422,12 +504,18 @@ export function Portfolio({ content }: { content: Content }) {
                   data-magnetic
                   aria-label="View portfolio on Behance (opens in new tab)"
                 >
-                  <div className="connect-card-icon" aria-hidden="true"><GlobeIcon /></div>
+                  <div className="connect-card-icon" aria-hidden="true">
+                    <GlobeIcon />
+                  </div>
                   <div className="connect-card-body">
-                    <strong className="connect-card-title">Browse my portfolio</strong>
+                    <strong className="connect-card-title">
+                      Browse my portfolio
+                    </strong>
                     <span className="connect-card-sub">Behance · earubang</span>
                   </div>
-                  <span className="connect-card-arrow" aria-hidden="true"><ArrowRight /></span>
+                  <span className="connect-card-arrow" aria-hidden="true">
+                    <ArrowRight />
+                  </span>
                 </a>
 
                 <a
@@ -436,12 +524,20 @@ export function Portfolio({ content }: { content: Content }) {
                   data-magnetic
                   aria-label="Connect on LinkedIn"
                 >
-                  <div className="connect-card-icon" aria-hidden="true"><SocialLinkedIn /></div>
-                  <div className="connect-card-body">
-                    <strong className="connect-card-title">Connect on LinkedIn</strong>
-                    <span className="connect-card-sub">Send a message or connect</span>
+                  <div className="connect-card-icon" aria-hidden="true">
+                    <SocialLinkedIn />
                   </div>
-                  <span className="connect-card-arrow" aria-hidden="true"><ArrowRight /></span>
+                  <div className="connect-card-body">
+                    <strong className="connect-card-title">
+                      Connect on LinkedIn
+                    </strong>
+                    <span className="connect-card-sub">
+                      Send a message or connect
+                    </span>
+                  </div>
+                  <span className="connect-card-arrow" aria-hidden="true">
+                    <ArrowRight />
+                  </span>
                 </a>
               </div>
             </div>
@@ -456,13 +552,28 @@ export function Portfolio({ content }: { content: Content }) {
                   <span className="mark">{initials}</span>
                   <span>{c.meta.name}</span>
                 </div>
-                <p className="footer-meta">© 2026 — Crafted with care in Quezon City.</p>
+                <p className="footer-meta">
+                  © 2026 — Crafted with care in Quezon City.
+                </p>
               </div>
               <div className="footer-socials">
-                <a href={c.contact.portfolioUrl} target="_blank" rel="noopener noreferrer" aria-label="Behance"><SocialBehance /></a>
-                <a href="#" aria-label="LinkedIn"><SocialLinkedIn /></a>
-                <a href="#" aria-label="GitHub"><SocialGitHub /></a>
-                <a href={`mailto:${c.contact.email}`} aria-label="Email"><MailIcon /></a>
+                <a
+                  href={c.contact.portfolioUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Behance"
+                >
+                  <SocialBehance />
+                </a>
+                <a href="#" aria-label="LinkedIn">
+                  <SocialLinkedIn />
+                </a>
+                <a href="#" aria-label="GitHub">
+                  <SocialGitHub />
+                </a>
+                <a href={`mailto:${c.contact.email}`} aria-label="Email">
+                  <MailIcon />
+                </a>
               </div>
             </div>
           </div>

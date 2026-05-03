@@ -62,7 +62,9 @@ export function HeroSection() {
             </div>
 
             <h1 className="font-display font-light leading-[1.02] tracking-[-0.045em] text-[clamp(48px,8.4vw,128px)] pb-2">
-              <span className="block text-fg-muted/80">{profile.firstName}</span>
+              <span className="block text-fg-muted/80">
+                {profile.firstName}
+              </span>
               <span className="block text-gradient-cv font-black">
                 {profile.lastName}
                 <span className="text-magenta">.</span>
@@ -71,15 +73,15 @@ export function HeroSection() {
 
             <div className="mt-8 flex flex-col gap-2 max-w-2xl">
               <p className="font-mono text-[12px] tracking-[0.22em] uppercase text-fg-muted">
-                — {profile.role} since 2011
+                — {profile.role} since 2010
               </p>
               <p className="font-sans text-[clamp(22px,2.6vw,34px)] font-bold leading-[1.15] pb-1">
-                I build{" "}
-                <span className="text-shimmer">{typed}</span>
+                I build <span className="text-shimmer">{typed}</span>
                 <span className="inline-block w-[3px] h-[0.9em] translate-y-[2px] bg-cyan ml-1 animate-blink-caret" />
               </p>
               <p className="italic text-fg-muted text-[clamp(17px,1.5vw,21px)] mt-2 leading-relaxed">
-                Fifteen years of typing curly braces so that other people don't have to.
+                Fifteen years of typing curly braces so that other people don't
+                have to.
               </p>
             </div>
 
@@ -155,9 +157,7 @@ export function HeroSection() {
                       <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-fg-dim">
                         Born
                       </p>
-                      <p className="font-bold text-fg mt-1">
-                        Mar 26 ’87
-                      </p>
+                      <p className="font-bold text-fg mt-1">Mar 26 ’87</p>
                     </div>
                     <div className="rounded-xl hairline p-3">
                       <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-fg-dim">
