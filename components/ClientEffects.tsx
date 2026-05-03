@@ -144,6 +144,7 @@ export function ClientEffects() {
     const tiltCleanups: Array<() => void> = [];
     tilts.forEach((card) => {
       const onTiltMove = (e: MouseEvent) => {
+        card.style.zIndex = "2";
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width;
         const py = (e.clientY - r.top) / r.height;
@@ -152,6 +153,7 @@ export function ClientEffects() {
         card.style.transform = `perspective(900px) rotateX(${rXdeg}deg) rotateY(${rYdeg}deg) translateY(-3px)`;
       };
       const onTiltLeave = () => {
+        card.style.zIndex = "";
         card.style.transform = "";
       };
       card.addEventListener("mousemove", onTiltMove);

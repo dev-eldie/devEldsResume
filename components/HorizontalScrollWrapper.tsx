@@ -73,25 +73,55 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
           }
 
           panels.forEach((panel) => {
-            const items = panel.querySelectorAll(".h-reveal");
-            if (!items.length) return;
-            gsap.fromTo(
-              items,
-              { opacity: 0, y: 40 },
-              {
-                opacity: 1,
-                y: 0,
-                stagger: 0.07,
-                duration: 0.85,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: panel,
-                  containerAnimation: tween,
-                  start: "left 80%",
-                  toggleActions: "play none none reverse",
-                },
-              }
+            const header = panel.querySelector<HTMLElement>(".section-head.h-reveal");
+            const cards = gsap.utils.toArray<HTMLElement>(
+              panel.querySelectorAll(".h-reveal:not(.section-head)")
             );
+
+            const triggerBase = {
+              trigger: panel,
+              containerAnimation: tween,
+              toggleActions: "play none none reverse" as const,
+            };
+
+            // Section header: sweeps in from the left diagonally
+            if (header) {
+              gsap.fromTo(
+                header,
+                { opacity: 0, x: -70, y: -20 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  duration: 1,
+                  ease: "power3.out",
+                  scrollTrigger: { ...triggerBase, start: "left 90%" },
+                }
+              );
+            }
+
+            // Cards/items: alternate bottom-left / bottom-right diagonal entry
+            if (cards.length) {
+              gsap.fromTo(
+                cards,
+                {
+                  opacity: 0,
+                  x: (i: number) => (i % 2 === 0 ? -50 : 50),
+                  y: 65,
+                  rotation: (i: number) => (i % 2 === 0 ? -3 : 3),
+                },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  rotation: 0,
+                  stagger: 0.1,
+                  duration: 0.9,
+                  ease: "power3.out",
+                  scrollTrigger: { ...triggerBase, start: "left 75%" },
+                }
+              );
+            }
           });
 
           ScrollTrigger.refresh();

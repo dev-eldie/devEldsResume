@@ -46,7 +46,7 @@
   --accent: #6d28d9;
   --accent-2: #0891b2;
   --accent-3: #be185d;
-  --accent-grad: linear-gradient(135deg, #6d28d9 0%, #0891b2 50%, #be185d 100%);
+  --accent-grad: linear-gradient(135deg, #0369a1 0%, #1d4ed8 45%, #4338ca 75%, #6d28d9 100%);
   --neu-light: rgba(255, 255, 255, 1);
   --neu-dark: rgba(163, 177, 198, 0.55);
   --neu-inset-light: rgba(255, 255, 255, 0.9);
@@ -591,8 +591,9 @@ h1, h2, h3, h4 {
 .skill-card {
   padding: 28px; position: relative; overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 0;
 }
-.skill-card:hover { transform: translateY(-4px); }
+.skill-card:hover { z-index: 2; }
 .skill-icon {
   width: 48px; height: 48px; border-radius: 14px;
   background: var(--bg-1);
