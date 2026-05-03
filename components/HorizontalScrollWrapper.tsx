@@ -8,7 +8,7 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
 
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
-    let mm: { revert: () => void } | undefined;
+    let mm: { add(q: string, h: () => void): void; revert(): void } | undefined;
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
