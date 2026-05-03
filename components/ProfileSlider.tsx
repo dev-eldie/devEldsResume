@@ -48,7 +48,13 @@ export function ProfileSlider({ images, alt }: ProfileSliderProps) {
     <div className="profile-slider">
       <div
         className="profile-slider-bg"
-        style={{ backgroundImage: `url(${bgSrc})` }}
+        style={{
+          backgroundImage: `url(${
+            bgSrc.startsWith("/")
+              ? `/_next/image?url=${encodeURIComponent(bgSrc)}&w=640&q=20`
+              : bgSrc
+          })`,
+        }}
         aria-hidden="true"
       />
       <div className={`profile-slide phase-${phase}`}>

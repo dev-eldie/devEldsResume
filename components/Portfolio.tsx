@@ -133,7 +133,7 @@ export function Portfolio({ content }: { content: Content }) {
                 {c.hero.stats.map((s, i) => (
                   <div key={i} className="stat-card neu-soft">
                     <div className="num">
-                      <span data-counter={s.value}>0</span>
+                      <span data-counter={s.value}>{s.value}</span>
                       {s.suffix}
                     </div>
                     <div className="lbl">{s.label}</div>
