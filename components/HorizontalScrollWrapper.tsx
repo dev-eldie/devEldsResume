@@ -8,6 +8,9 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
 
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
+    let mm: { revert: () => void } | undefined;
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const init = async () => {
       const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
@@ -20,11 +23,14 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
       const stage = stageRef.current;
       if (!stage) return;
 
+      // Store natural top before GSAP pin changes offsetTop
+      (window as any).__stageNaturalTop = stage.getBoundingClientRect().top + window.scrollY;
+
       ctx = gsap.context(() => {
         const panels = gsap.utils.toArray<HTMLElement>(".h-panel");
         if (!panels.length) return;
 
-        const mm = gsap.matchMedia();
+        mm = gsap.matchMedia();
 
         mm.add("(min-width: 768px)", () => {
           const n = panels.length;
@@ -40,6 +46,10 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
               start: "top top",
               end: () => "+=" + window.innerWidth * (n - 1),
               invalidateOnRefresh: true,
+              onEnter()      { (window as any).__horizActive = true; },
+              onEnterBack()  { (window as any).__horizActive = true; },
+              onLeave()      { (window as any).__horizActive = false; },
+              onLeaveBack()  { (window as any).__horizActive = false; },
               onUpdate(self) {
                 const p = self.progress;
                 let bestIdx = 0;
@@ -52,9 +62,7 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
                     bestIdx = i;
                   }
                 }
-                document.querySelectorAll<HTMLElement>(".nav-link").forEach((l) => {
-                  l.classList.toggle("active", l.getAttribute("href") === "#" + ids[bestIdx]);
-                });
+                ((window as any).__setActiveNav as ((id: string) => void) | undefined)?.(ids[bestIdx]);
               },
             },
           });
@@ -68,12 +76,14 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
                 start: "top top",
                 end: () => "+=" + window.innerWidth * (n - 1),
                 scrub: true,
+                invalidateOnRefresh: true,
               },
             });
           }
 
           panels.forEach((panel) => {
             const header = panel.querySelector<HTMLElement>(".section-head.h-reveal");
+            const isExperience = !!panel.querySelector(".h-timeline");
             const cards = gsap.utils.toArray<HTMLElement>(
               panel.querySelectorAll(".h-reveal:not(.section-head)")
             );
@@ -84,40 +94,59 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
               toggleActions: "play none none reverse" as const,
             };
 
-            // Section header: sweeps in from the left diagonally
+            if (prefersReduced) {
+              if (header) gsap.set(header, { opacity: 1, x: 0, y: 0 });
+              if (cards.length) gsap.set(cards, { opacity: 1, x: 0, y: 0 });
+              return;
+            }
+
+            // Section header: diagonal sweep from top-left
             if (header) {
               gsap.fromTo(
                 header,
-                { opacity: 0, x: -70, y: -20 },
+                { opacity: 0, x: -80, y: -24, scale: 0.97 },
                 {
-                  opacity: 1,
-                  x: 0,
-                  y: 0,
-                  duration: 1,
-                  ease: "power3.out",
+                  opacity: 1, x: 0, y: 0, scale: 1,
+                  duration: 1.1, ease: "expo.out",
+                  clearProps: "scale,will-change",
                   scrollTrigger: { ...triggerBase, start: "left 90%" },
                 }
               );
             }
 
-            // Cards/items: alternate bottom-left / bottom-right diagonal entry
-            if (cards.length) {
+            if (!cards.length) return;
+
+            if (isExperience) {
+              // 2-col grid: left column slides from left, right column from right,
+              // same stagger delay per row so both sides enter together — no rotation
+              const leftCards  = cards.filter((_, i) => i % 2 === 0);
+              const rightCards = cards.filter((_, i) => i % 2 === 1);
+              const shared = {
+                opacity: 1, x: 0, y: 0, scale: 1,
+                stagger: { each: 0.14 },
+                duration: 1, ease: "expo.out",
+                clearProps: "scale,will-change",
+                scrollTrigger: { ...triggerBase, start: "left 75%" },
+              };
+              if (leftCards.length)
+                gsap.fromTo(leftCards,  { opacity: 0, x: -60, y: 48, scale: 0.94 }, shared);
+              if (rightCards.length)
+                gsap.fromTo(rightCards, { opacity: 0, x:  60, y: 48, scale: 0.94 }, shared);
+            } else {
+              // Skills / Education: alternating diagonal with subtle rotation
               gsap.fromTo(
                 cards,
                 {
                   opacity: 0,
-                  x: (i: number) => (i % 2 === 0 ? -50 : 50),
-                  y: 65,
-                  rotation: (i: number) => (i % 2 === 0 ? -3 : 3),
+                  x: (i: number) => (i % 2 === 0 ? -56 : 56),
+                  y: 72, scale: 0.93,
+                  rotation: (i: number) => (i % 2 === 0 ? -2.5 : 2.5),
                 },
                 {
-                  opacity: 1,
-                  x: 0,
-                  y: 0,
-                  rotation: 0,
-                  stagger: 0.1,
-                  duration: 0.9,
-                  ease: "power3.out",
+                  opacity: 1, x: 0, y: 0, scale: 1, rotation: 0,
+                  stagger: { each: 0.09, ease: "power2.out" },
+                  duration: 1, ease: "expo.out",
+                  clearProps: "scale,rotation,will-change",
                   scrollTrigger: { ...triggerBase, start: "left 75%" },
                 }
               );
@@ -131,7 +160,12 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
 
     init();
 
-    return () => ctx?.revert();
+    return () => {
+      mm?.revert();
+      ctx?.revert();
+      delete (window as any).__stageNaturalTop;
+      delete (window as any).__horizActive;
+    };
   }, []);
 
   return (

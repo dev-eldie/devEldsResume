@@ -1,7 +1,6 @@
 import Image from "next/image";
 import type { Content } from "@/lib/schema";
 import { ClientEffects, ThemeToggle } from "./ClientEffects";
-import { ContactForm } from "./ContactForm";
 import { DefaultLogoTag } from "./Logo";
 import { HorizontalScrollWrapper } from "./HorizontalScrollWrapper";
 import { ProfileSlider } from "./ProfileSlider";
@@ -246,7 +245,15 @@ export function Portfolio({ content }: { content: Content }) {
                           <span key={j} className="tag">{t}</span>
                         ))}
                       </div>
-                      <div className="skill-bar" data-w={`${s.proficiency}%`}>
+                      <div
+                        className="skill-bar"
+                        data-w={`${s.proficiency}%`}
+                        role="progressbar"
+                        aria-valuenow={s.proficiency}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-label={`${s.title} proficiency: ${s.proficiency}%`}
+                      >
                         <span className="fill" />
                       </div>
                       <div className="skill-pct">PROFICIENCY · {s.proficiency}%</div>
@@ -369,7 +376,7 @@ export function Portfolio({ content }: { content: Content }) {
                     <div className="value">{c.contact.email}</div>
                   </div>
                 </a>
-                <a href={c.contact.portfolioUrl} target="_blank" rel="noopener" className="contact-row" data-magnetic>
+                <a href={c.contact.portfolioUrl} target="_blank" rel="noopener noreferrer" className="contact-row" data-magnetic>
                   <div className="contact-icon"><GlobeIcon /></div>
                   <div>
                     <div className="label">Portfolio</div>
@@ -385,7 +392,59 @@ export function Portfolio({ content }: { content: Content }) {
                 </a>
               </aside>
 
-              <ContactForm />
+              {/* Connect panel — replaces form with direct-action cards */}
+              <div className="connect-panel neu reveal">
+                <div className="connect-panel-head">
+                  <h3 className="connect-panel-title">Let&apos;s connect</h3>
+                  <p className="connect-panel-sub">
+                    Pick your preferred channel — I respond within 24 hours, Mon–Fri.
+                  </p>
+                </div>
+
+                <a
+                  href={`tel:${c.contact.phone.replace(/[^\d+]/g, "")}`}
+                  className="connect-card"
+                  data-magnetic
+                  aria-label={`Call or WhatsApp ${c.contact.phone}`}
+                >
+                  <div className="connect-card-icon" aria-hidden="true"><PhoneIcon /></div>
+                  <div className="connect-card-body">
+                    <strong className="connect-card-title">Call or WhatsApp</strong>
+                    <span className="connect-card-sub">{c.contact.phone}</span>
+                  </div>
+                  <span className="connect-card-arrow" aria-hidden="true"><ArrowRight /></span>
+                </a>
+
+                <a
+                  href={c.contact.portfolioUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="connect-card"
+                  data-magnetic
+                  aria-label="View portfolio on Behance (opens in new tab)"
+                >
+                  <div className="connect-card-icon" aria-hidden="true"><GlobeIcon /></div>
+                  <div className="connect-card-body">
+                    <strong className="connect-card-title">Browse my portfolio</strong>
+                    <span className="connect-card-sub">Behance · earubang</span>
+                  </div>
+                  <span className="connect-card-arrow" aria-hidden="true"><ArrowRight /></span>
+                </a>
+
+                <a
+                  href="#"
+                  className="connect-card"
+                  data-magnetic
+                  aria-label="Connect on LinkedIn"
+                >
+                  <div className="connect-card-icon" aria-hidden="true"><SocialLinkedIn /></div>
+                  <div className="connect-card-body">
+                    <strong className="connect-card-title">Connect on LinkedIn</strong>
+                    <span className="connect-card-sub">Send a message or connect</span>
+                  </div>
+                  <span className="connect-card-arrow" aria-hidden="true"><ArrowRight /></span>
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -401,7 +460,7 @@ export function Portfolio({ content }: { content: Content }) {
                 <p className="footer-meta">© 2026 — Crafted with care in Quezon City.</p>
               </div>
               <div className="footer-socials">
-                <a href={c.contact.portfolioUrl} target="_blank" rel="noopener" aria-label="Behance"><SocialBehance /></a>
+                <a href={c.contact.portfolioUrl} target="_blank" rel="noopener noreferrer" aria-label="Behance"><SocialBehance /></a>
                 <a href="#" aria-label="LinkedIn"><SocialLinkedIn /></a>
                 <a href="#" aria-label="GitHub"><SocialGitHub /></a>
                 <a href={`mailto:${c.contact.email}`} aria-label="Email"><MailIcon /></a>

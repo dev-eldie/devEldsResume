@@ -760,29 +760,70 @@ h1, h2, h3, h4 {
 }
 .contact-row .value { font-size: 15px; font-weight: 500; margin-top: 2px; }
 
-.form-group { margin-bottom: 16px; }
-.form-group label {
-  display: block; font-size: 12px; color: var(--text-muted);
+/* =========================================================
+   CONNECT PANEL (replaces contact form)
+   ========================================================= */
+.connect-panel {
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.connect-panel-head { margin-bottom: 6px; }
+.connect-panel-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+.connect-panel-sub {
+  font-size: 14px; color: var(--text-muted); line-height: 1.65;
+}
+
+.connect-card {
+  display: flex; align-items: center; gap: 18px;
+  padding: 20px 22px; border-radius: 18px;
+  background: var(--bg-1);
+  box-shadow: -5px -5px 12px var(--neu-light), 5px 5px 12px var(--neu-dark);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-decoration: none; color: var(--text);
+}
+.connect-card:hover {
+  transform: translateY(-3px);
+  box-shadow: -2px -2px 6px var(--neu-light), 2px 2px 6px var(--neu-dark);
+}
+.connect-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 18px;
+}
+
+.connect-card-icon {
+  width: 50px; height: 50px; border-radius: 15px; flex-shrink: 0;
+  display: grid; place-items: center;
+  background: var(--accent-grad); color: #fff;
+  box-shadow: 0 8px 20px -8px var(--accent);
+}
+.connect-card-icon svg { width: 22px; height: 22px; }
+
+.connect-card-body {
+  flex: 1; display: flex; flex-direction: column; gap: 3px;
+  min-width: 0;
+}
+.connect-card-title {
+  font-size: 15px; font-weight: 600; color: var(--text);
+}
+.connect-card-sub {
+  font-size: 12px; color: var(--text-muted);
   font-family: "JetBrains Mono", monospace;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  margin-bottom: 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.form-input, .form-textarea {
-  width: 100%; padding: 16px 18px;
-  font: inherit; font-size: 15px;
-  color: var(--text); background: var(--bg-1);
-  border: none; border-radius: 14px;
-  outline: none;
-  box-shadow: inset 3px 3px 6px var(--neu-inset-dark), inset -3px -3px 6px var(--neu-inset-light);
-  transition: box-shadow 0.3s;
+
+.connect-card-arrow {
+  flex-shrink: 0; color: var(--accent);
+  display: grid; place-items: center;
+  transition: transform 0.25s ease;
 }
-.form-input:focus, .form-textarea:focus {
-  box-shadow: inset 3px 3px 6px var(--neu-inset-dark),
-              inset -3px -3px 6px var(--neu-inset-light),
-              0 0 0 2px var(--accent);
+.connect-card:hover .connect-card-arrow {
+  transform: translate(3px, -3px);
 }
-.form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
-.form-textarea { min-height: 130px; resize: vertical; font-family: inherit; }
+.connect-card-arrow svg { width: 18px; height: 18px; }
 
 /* =========================================================
    FOOTER

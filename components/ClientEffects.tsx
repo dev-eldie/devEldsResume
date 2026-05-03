@@ -123,21 +123,50 @@ export function ClientEffects() {
     document.querySelectorAll<HTMLElement>(".skill-bar").forEach((el) => sIO.observe(el));
 
     // ---------- ACTIVE NAV LINK ----------
-    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
     const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
-    const navIO = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            navLinks.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === "#" + id));
-          }
-        });
-      },
-      { threshold: 0.35, rootMargin: "-20% 0px -50% 0px" }
-    );
-    const horizIds = new Set(["skills", "experience", "education"]);
-    sections.filter((s) => !horizIds.has(s.id)).forEach((s) => navIO.observe(s));
+
+    const setNav = (id: string | null) =>
+      navLinks.forEach((l) =>
+        l.classList.toggle("active", !!id && l.getAttribute("href") === "#" + id)
+      );
+
+    // Expose setter so HorizontalScrollWrapper's GSAP onUpdate can sync precisely
+    (window as any).__setActiveNav = setNav;
+
+    const aboutEl  = document.getElementById("about");
+    const stageEl  = document.getElementById("horizontal-stage");
+    const contactEl = document.getElementById("contact");
+
+    const updateNav = () => {
+      const sy  = window.scrollY;
+      const vh  = window.innerHeight;
+
+      // Hero zone (before About) → nothing active
+      const aboutTop = aboutEl?.offsetTop ?? Infinity;
+      if (sy + vh * 0.5 < aboutTop) { setNav(null); return; }
+
+      // Horizontal zone — GSAP sets __horizActive flag via onPin/onUnpin/onLeaveBack
+      // (offsetTop is unreliable once GSAP pins the element to position:fixed)
+      if ((window as any).__horizActive) {
+        const horizActive = Array.from(navLinks).some(
+          (l) => ["#skills","#experience","#education"].includes(l.getAttribute("href") ?? "") &&
+                 l.classList.contains("active")
+        );
+        if (!horizActive) setNav("skills");
+        return;
+      }
+
+      // Contact zone
+      const contactTop = contactEl?.offsetTop ?? Infinity;
+      if (sy + vh * 0.5 >= contactTop) { setNav("contact"); return; }
+
+      // About zone
+      setNav("about");
+    };
+
+    const onNavScroll = () => requestAnimationFrame(updateNav);
+    window.addEventListener("scroll", onNavScroll, { passive: true });
+    updateNav();
 
     // ---------- TILT ----------
     const tilts = document.querySelectorAll<HTMLElement>(".stat-card, .skill-card, .tl-card");
@@ -175,7 +204,21 @@ export function ClientEffects() {
       const el = document.getElementById(id);
       if (!el) return;
       e.preventDefault();
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // Horizontal panels live inside a GSAP-pinned stage — scrollIntoView only
+      // reaches the stage top, never panel 2 or 3. Calculate the correct vertical
+      // scroll position: stageNaturalTop + panelIndex × viewportWidth.
+      const horizIds = ["skills", "experience", "education"];
+      const panelIdx = horizIds.indexOf(id);
+      if (panelIdx !== -1) {
+        const stageTop =
+          ((window as any).__stageNaturalTop as number | undefined) ??
+          (document.getElementById("horizontal-stage")?.offsetTop ?? 0);
+        window.scrollTo({ top: stageTop + panelIdx * window.innerWidth, behavior: "smooth" });
+      } else {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
       // keep address bar clean — strip the #section
       try {
         history.replaceState(null, "", window.location.pathname + window.location.search);
@@ -214,10 +257,12 @@ export function ClientEffects() {
       });
       magCleanups.forEach((c) => c());
       tiltCleanups.forEach((c) => c());
+      window.removeEventListener("scroll", onNavScroll);
+      delete (window as any).__setActiveNav;
+      delete (window as any).__horizActive;
       io.disconnect();
       cIO.disconnect();
       sIO.disconnect();
-      navIO.disconnect();
     };
   }, []);
 
