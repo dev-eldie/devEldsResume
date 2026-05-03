@@ -46,10 +46,6 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
               start: "top top",
               end: () => "+=" + window.innerWidth * (n - 1),
               invalidateOnRefresh: true,
-              onEnter()      { (window as any).__horizActive = true; },
-              onEnterBack()  { (window as any).__horizActive = true; },
-              onLeave()      { (window as any).__horizActive = false; },
-              onLeaveBack()  { (window as any).__horizActive = false; },
               onUpdate(self) {
                 const p = self.progress;
                 let bestIdx = 0;
@@ -117,8 +113,7 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
             if (!cards.length) return;
 
             if (isExperience) {
-              // 2-col grid: left column slides from left, right column from right,
-              // same stagger delay per row so both sides enter together — no rotation
+              // 2-col grid: left column from top-left, right column from top-right
               const leftCards  = cards.filter((_, i) => i % 2 === 0);
               const rightCards = cards.filter((_, i) => i % 2 === 1);
               const shared = {
@@ -129,17 +124,17 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
                 scrollTrigger: { ...triggerBase, start: "left 75%" },
               };
               if (leftCards.length)
-                gsap.fromTo(leftCards,  { opacity: 0, x: -60, y: 48, scale: 0.94 }, shared);
+                gsap.fromTo(leftCards,  { opacity: 0, x: -60, y: -24, scale: 0.94 }, shared);
               if (rightCards.length)
-                gsap.fromTo(rightCards, { opacity: 0, x:  60, y: 48, scale: 0.94 }, shared);
+                gsap.fromTo(rightCards, { opacity: 0, x:  60, y: -24, scale: 0.94 }, shared);
             } else {
-              // Skills / Education: alternating diagonal with subtle rotation
+              // Skills / Education: alternating diagonal from top corners, subtle rotation
               gsap.fromTo(
                 cards,
                 {
                   opacity: 0,
                   x: (i: number) => (i % 2 === 0 ? -56 : 56),
-                  y: 72, scale: 0.93,
+                  y: -28, scale: 0.93,
                   rotation: (i: number) => (i % 2 === 0 ? -2.5 : 2.5),
                 },
                 {
@@ -164,7 +159,6 @@ export function HorizontalScrollWrapper({ children }: { children: React.ReactNod
       mm?.revert();
       ctx?.revert();
       delete (window as any).__stageNaturalTop;
-      delete (window as any).__horizActive;
     };
   }, []);
 

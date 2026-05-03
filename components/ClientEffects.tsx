@@ -145,15 +145,20 @@ export function ClientEffects() {
       const aboutTop = aboutEl?.offsetTop ?? Infinity;
       if (sy + vh * 0.5 < aboutTop) { setNav(null); return; }
 
-      // Horizontal zone — GSAP sets __horizActive flag via onPin/onUnpin/onLeaveBack
-      // (offsetTop is unreliable once GSAP pins the element to position:fixed)
-      if ((window as any).__horizActive) {
-        const horizActive = Array.from(navLinks).some(
-          (l) => ["#skills","#experience","#education"].includes(l.getAttribute("href") ?? "") &&
-                 l.classList.contains("active")
-        );
-        if (!horizActive) setNav("skills");
-        return;
+      // Horizontal zone — compare scrollY against stored natural stage top.
+      // GSAP pin changes offsetTop to 0, so we can't use the DOM; __stageNaturalTop
+      // is set by HorizontalScrollWrapper before GSAP touches the element.
+      const stageNaturalTop = (window as any).__stageNaturalTop as number | undefined;
+      if (stageNaturalTop !== undefined) {
+        const horizEnd = stageNaturalTop + window.innerWidth * 2; // 3 panels → 2 widths
+        if (sy >= stageNaturalTop - 2 && sy <= horizEnd + 2) {
+          const horizActive = Array.from(navLinks).some(
+            (l) => ["#skills","#experience","#education"].includes(l.getAttribute("href") ?? "") &&
+                   l.classList.contains("active")
+          );
+          if (!horizActive) setNav("skills");
+          return;
+        }
       }
 
       // Contact zone
@@ -259,7 +264,6 @@ export function ClientEffects() {
       tiltCleanups.forEach((c) => c());
       window.removeEventListener("scroll", onNavScroll);
       delete (window as any).__setActiveNav;
-      delete (window as any).__horizActive;
       io.disconnect();
       cIO.disconnect();
       sIO.disconnect();
