@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
-const ALLOWED_KINDS = new Set(["avatar", "logo"]);
+const ALLOWED_KINDS = new Set(["avatar", "logo", "logo-dark", "logo-light"]);
 
 export async function POST(req: Request) {
   const jar = await cookies();

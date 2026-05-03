@@ -80,6 +80,8 @@ export const ContentSchema = z.object({
     title: z.string(),
     description: z.string(),
     logoUrl: z.string().optional().default(""),
+    logoDarkUrl: z.string().optional().default(""),
+    logoLightUrl: z.string().optional().default(""),
   }),
 });
 

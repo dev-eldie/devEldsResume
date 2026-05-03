@@ -11,29 +11,29 @@ const TOOL_KEYS = ["figma", "react", "vue", "ts", "shopify", "wp", "xd", "ps", "
 export function AdminEditor({ initial }: { initial: Content }) {
   const [c, setC] = useState<Content>(initial);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const logoInputRef = useRef<HTMLInputElement | null>(null);
-  const [uploadingKind, setUploadingKind] = useState<null | "avatar" | "logo">(null);
+  const logoDarkInputRef = useRef<HTMLInputElement | null>(null);
+  const logoLightInputRef = useRef<HTMLInputElement | null>(null);
+  const [uploadingKind, setUploadingKind] = useState<null | "avatar" | "logo-dark" | "logo-light">(null);
 
-  async function uploadFile(file: File, kind: "logo") {
-    setUploadingKind(kind);
+  async function uploadLogoVariant(file: File, variant: "logo-dark" | "logo-light") {
+    setUploadingKind(variant);
     setStatus({ kind: "idle" });
     try {
       const fd = new FormData();
       fd.append("file", file);
-      fd.append("kind", kind);
+      fd.append("kind", variant);
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Upload failed");
-      setC((prev) => ({
-        ...prev,
-        meta: { ...prev.meta, logoUrl: data.url as string },
-      }));
-      setStatus({ kind: "ok", msg: `Uploaded · click "Save changes" para mai-persist sa content.json` });
+      const field = variant === "logo-dark" ? "logoDarkUrl" : "logoLightUrl";
+      setC((prev) => ({ ...prev, meta: { ...prev.meta, [field]: data.url as string } }));
+      setStatus({ kind: "ok", msg: `Uploaded · click "Save changes" para mai-persist.` });
     } catch (e) {
       setStatus({ kind: "err", msg: e instanceof Error ? e.message : "Upload failed" });
     } finally {
       setUploadingKind(null);
-      if (logoInputRef.current) logoInputRef.current.value = "";
+      if (variant === "logo-dark" && logoDarkInputRef.current) logoDarkInputRef.current.value = "";
+      if (variant === "logo-light" && logoLightInputRef.current) logoLightInputRef.current.value = "";
     }
   }
 
@@ -84,9 +84,8 @@ export function AdminEditor({ initial }: { initial: Content }) {
       about: { ...c.about, profile: { ...c.about.profile, avatarUrl: "" } },
     });
   }
-  function clearLogo() {
-    setC({ ...c, meta: { ...c.meta, logoUrl: "" } });
-  }
+  function clearLogoDark()  { setC({ ...c, meta: { ...c.meta, logoDarkUrl: "" } }); }
+  function clearLogoLight() { setC({ ...c, meta: { ...c.meta, logoLightUrl: "" } }); }
 
   async function save() {
     setStatus({ kind: "saving" });
@@ -227,91 +226,59 @@ export function AdminEditor({ initial }: { initial: Content }) {
           </div>
 
           <div className="list-card-head">Logo</div>
-          <div className="list-card" style={{ display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
-            <div
-              style={{
-                minHeight: 56,
-                padding: 10,
-                borderRadius: 14,
-                background: "rgba(0,0,0,0.18)",
-                display: "grid",
-                placeItems: "center",
-                flexShrink: 0,
-              }}
-            >
-              {c.meta.logoUrl ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={c.meta.logoUrl}
-                  alt="logo preview"
-                  style={{ display: "block", height: 36, width: "auto", maxWidth: 180, objectFit: "contain" }}
-                />
-              ) : (
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "8px 14px",
-                    height: 34,
-                    borderRadius: 12,
-                    background: "var(--accent-grad)",
-                    color: "#fff",
-                    boxShadow: "0 8px 22px -8px var(--accent)",
-                    fontFamily: '"Space Grotesk", sans-serif',
-                    fontWeight: 700,
-                    fontSize: 15,
-                    letterSpacing: "0.06em",
-                    lineHeight: 1,
-                  }}
-                >
-                  <svg viewBox="0 0 10 16" height="14" width="9" fill="none" aria-hidden="true">
-                    <path d="M7.5 2 L2.5 8 L7.5 14" stroke="white" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <span>EA</span>
-                  <svg viewBox="0 0 14 16" height="14" width="13" fill="none" aria-hidden="true">
-                    <path d="M3 14 L8 2" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
-                    <path d="M7.5 2 L12.5 8 L7.5 14" stroke="white" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              )}
-            </div>
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <input
-                ref={logoInputRef}
-                type="file"
-                accept="image/svg+xml,image/png,image/webp,image/jpeg,image/gif"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) void uploadFile(f, "logo");
-                }}
-              />
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button
-                  type="button"
-                  className="btn-tiny"
-                  onClick={() => logoInputRef.current?.click()}
-                  disabled={uploadingKind === "logo"}
-                >
-                  {uploadingKind === "logo" ? "Uploading…" : c.meta.logoUrl ? "Replace logo" : "Upload custom logo"}
-                </button>
-                {c.meta.logoUrl && (
-                  <button type="button" className="btn-tiny danger" onClick={clearLogo}>
-                    Use default abstract logo
-                  </button>
-                )}
-              </div>
-              <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8, fontFamily: '"JetBrains Mono", monospace' }}>
-                SVG (recommended) · PNG · WebP — max 5 MB. Square works best. Default = built-in abstract EA.Dev mark.
-              </p>
-              {c.meta.logoUrl && (
-                <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4, fontFamily: '"JetBrains Mono", monospace', wordBreak: "break-all" }}>
-                  → {c.meta.logoUrl}
-                </p>
-              )}
-            </div>
+          <div className="list-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            {/* Hidden file inputs */}
+            <input ref={logoDarkInputRef} type="file" accept="image/svg+xml,image/png,image/webp,image/jpeg" style={{ display: "none" }}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) void uploadLogoVariant(f, "logo-dark"); }} />
+            <input ref={logoLightInputRef} type="file" accept="image/svg+xml,image/png,image/webp,image/jpeg" style={{ display: "none" }}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) void uploadLogoVariant(f, "logo-light"); }} />
+
+            {/* Dark theme slot */}
+            {(["dark", "light"] as const).map((theme) => {
+              const isDark = theme === "dark";
+              const url = isDark ? c.meta.logoDarkUrl : c.meta.logoLightUrl;
+              const uploading = uploadingKind === (isDark ? "logo-dark" : "logo-light");
+              const inputRef = isDark ? logoDarkInputRef : logoLightInputRef;
+              const clearFn = isDark ? clearLogoDark : clearLogoLight;
+              const previewBg = isDark ? "#0d0d14" : "#f0f0f6";
+              const labelColor = isDark ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.35)";
+              return (
+                <div key={theme} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  <p style={{ fontSize: 11, fontFamily: '"JetBrains Mono", monospace', color: "var(--text-muted)", margin: 0 }}>
+                    {isDark ? "🌙 Dark theme logo" : "☀️ Light theme logo"}
+                  </p>
+                  {/* Preview box */}
+                  <div style={{ background: previewBg, borderRadius: 12, minHeight: 64, display: "grid", placeItems: "center", padding: 12 }}>
+                    {url ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={url} alt={`${theme} logo`} style={{ height: 36, width: "auto", maxWidth: 160, objectFit: "contain", display: "block" }} />
+                    ) : (
+                      <span style={{ fontSize: 11, color: labelColor, fontFamily: '"JetBrains Mono", monospace' }}>
+                        Default EA mark
+                      </span>
+                    )}
+                  </div>
+                  {/* Actions */}
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    <button type="button" className="btn-tiny" onClick={() => inputRef.current?.click()} disabled={!!uploadingKind}>
+                      {uploading ? "Uploading…" : url ? "Replace" : "Upload"}
+                    </button>
+                    {url && (
+                      <button type="button" className="btn-tiny danger" onClick={clearFn}>Clear</button>
+                    )}
+                  </div>
+                  {url && (
+                    <p style={{ fontSize: 10, color: "var(--text-muted)", fontFamily: '"JetBrains Mono", monospace', wordBreak: "break-all", margin: 0 }}>
+                      {url}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
           </div>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, fontFamily: '"JetBrains Mono", monospace' }}>
+            SVG recommended · PNG · WebP — max 5 MB. Upload separate logos for dark and light themes. If only one is set, the default EA mark is used for the other theme.
+          </p>
         </div>
       </details>
 

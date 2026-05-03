@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { Content } from "@/lib/schema";
 import { ClientEffects, ThemeToggle } from "./ClientEffects";
 import { DefaultLogoTag } from "./Logo";
@@ -63,22 +62,22 @@ export function Portfolio({ content }: { content: Content }) {
 
       <nav className="nav glass" aria-label="Primary">
         <a href="#top" className="nav-logo">
-          {c.meta.logoUrl ? (
-            c.meta.logoUrl.startsWith("/") ? (
-              <Image
-                src={c.meta.logoUrl}
-                alt={c.meta.name}
-                width={120}
-                height={40}
-                className="logo-uploaded"
-              />
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={c.meta.logoUrl} alt={c.meta.name} className="logo-uploaded" />
-            )
-          ) : (
-            <DefaultLogoTag />
-          )}
+          {(() => {
+            const darkSrc = c.meta.logoDarkUrl || c.meta.logoUrl || "";
+            const lightSrc = c.meta.logoLightUrl || c.meta.logoUrl || "";
+            // Use plain <img> for logos — next/image AVIF conversion corrupts alpha channels on sharp graphics
+            // eslint-disable-next-line @next/next/no-img-element
+            const renderImg = (src: string, cls: string) =>
+              <img key={cls} src={src} alt={c.meta.name} className={`logo-uploaded ${cls}`} />;
+            if (!darkSrc && !lightSrc) return <DefaultLogoTag />;
+            if (darkSrc === lightSrc) return renderImg(darkSrc, "");
+            return (
+              <>
+                {darkSrc ? renderImg(darkSrc, "logo-theme-dark") : <span className="logo-theme-dark"><DefaultLogoTag /></span>}
+                {lightSrc ? renderImg(lightSrc, "logo-theme-light") : <span className="logo-theme-light"><DefaultLogoTag /></span>}
+              </>
+            );
+          })()}
         </a>
         <div className="nav-links">
           <a className="nav-link active" href="#about">About</a>
